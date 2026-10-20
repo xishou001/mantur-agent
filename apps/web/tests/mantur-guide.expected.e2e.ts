@@ -367,7 +367,7 @@ it('preserves a live draft, attachments and controls with desktop checkpoints wh
     await expect.poll(() => workspaceButton.innerText()).toContain('workspace')
     const script = page.getByRole('tab', { name: '剧本创作' })
     await expect.poll(() => script.getAttribute('aria-selected')).toBe('true')
-    await page.getByText('你好呀，我是馒头仔，漫途的创作小助手！', { exact: true }).waitFor()
+    await page.getByText('你好呀，我是馒头仔，CUC漫创的创作小助手！', { exact: true }).waitFor()
     const mascot = page.getByRole('button', { name: '馒头仔' }).locator('img')
     await expect.poll(() => mascot.evaluate(element => (element as HTMLImageElement).naturalWidth)).toBe(552)
     const alpha = await mascot.evaluate((element) => {

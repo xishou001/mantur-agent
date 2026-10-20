@@ -36,8 +36,8 @@ function clientDocumentMetadata(): Plugin {
       await Promise.all([
         writeFile(src('./dist/manifest.webmanifest'), `${JSON.stringify({
           id: '/',
-          name: 'ManTur Agent',
-          short_name: 'ManTur Agent',
+          name: 'CUC漫创',
+          short_name: 'CUC漫创',
           start_url: '/',
           scope: '/',
           display: 'fullscreen',

@@ -37,12 +37,12 @@ exports[`desktop update menu > places update controls in the macOS app menu and 
     ],
     "platform": "darwin",
     "topLevel": [
-      "ManTur Agent",
+      "CUC漫创",
       "编辑",
       "显示",
       "窗口",
     ],
-    "updateParent": "ManTur Agent",
+    "updateParent": "CUC漫创",
   },
   {
     "items": [
@@ -121,12 +121,12 @@ exports[`desktop update menu > places update controls in the macOS app menu and 
     ],
     "platform": "darwin",
     "topLevel": [
-      "ManTur Agent",
+      "CUC漫创",
       "编辑",
       "显示",
       "窗口",
     ],
-    "updateParent": "ManTur Agent",
+    "updateParent": "CUC漫创",
   },
   {
     "items": [
@@ -163,12 +163,12 @@ exports[`desktop update menu > places update controls in the macOS app menu and 
     ],
     "platform": "darwin",
     "topLevel": [
-      "ManTur Agent",
+      "CUC漫创",
       "编辑",
       "显示",
       "窗口",
     ],
-    "updateParent": "ManTur Agent",
+    "updateParent": "CUC漫创",
   },
   {
     "items": [
@@ -205,12 +205,12 @@ exports[`desktop update menu > places update controls in the macOS app menu and 
     ],
     "platform": "darwin",
     "topLevel": [
-      "ManTur Agent",
+      "CUC漫创",
       "编辑",
       "显示",
       "窗口",
     ],
-    "updateParent": "ManTur Agent",
+    "updateParent": "CUC漫创",
   },
   {
     "items": [
@@ -247,12 +247,12 @@ exports[`desktop update menu > places update controls in the macOS app menu and 
     ],
     "platform": "darwin",
     "topLevel": [
-      "ManTur Agent",
+      "CUC漫创",
       "编辑",
       "显示",
       "窗口",
     ],
-    "updateParent": "ManTur Agent",
+    "updateParent": "CUC漫创",
   },
   {
     "items": [
@@ -289,12 +289,12 @@ exports[`desktop update menu > places update controls in the macOS app menu and 
     ],
     "platform": "darwin",
     "topLevel": [
-      "ManTur Agent",
+      "CUC漫创",
       "编辑",
       "显示",
       "窗口",
     ],
-    "updateParent": "ManTur Agent",
+    "updateParent": "CUC漫创",
   },
   {
     "items": [
@@ -331,12 +331,12 @@ exports[`desktop update menu > places update controls in the macOS app menu and 
     ],
     "platform": "darwin",
     "topLevel": [
-      "ManTur Agent",
+      "CUC漫创",
       "编辑",
       "显示",
       "窗口",
     ],
-    "updateParent": "ManTur Agent",
+    "updateParent": "CUC漫创",
   },
   {
     "items": [
@@ -373,12 +373,12 @@ exports[`desktop update menu > places update controls in the macOS app menu and 
     ],
     "platform": "darwin",
     "topLevel": [
-      "ManTur Agent",
+      "CUC漫创",
       "编辑",
       "显示",
       "窗口",
     ],
-    "updateParent": "ManTur Agent",
+    "updateParent": "CUC漫创",
   },
   {
     "items": [
@@ -415,12 +415,12 @@ exports[`desktop update menu > places update controls in the macOS app menu and 
     ],
     "platform": "darwin",
     "topLevel": [
-      "ManTur Agent",
+      "CUC漫创",
       "编辑",
       "显示",
       "窗口",
     ],
-    "updateParent": "ManTur Agent",
+    "updateParent": "CUC漫创",
   },
 ]
 `;

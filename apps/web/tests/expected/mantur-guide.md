@@ -1,11 +1,11 @@
-- text: 故事起于一念，余下交给漫途
+- text: 故事起于一念，余下交给CUC漫创
 - tablist "创作方向":
   - tab "剧本创作" [selected]
   - tab "漫剧制作"
   - tab "素材生产"
 - region "馒头仔":
   - button "关闭引导": ×
-  - strong: 你好呀，我是馒头仔，漫途的创作小助手！
+  - strong: 你好呀，我是馒头仔，CUC漫创的创作小助手！
   - paragraph: 从写剧本、做画面到剪成片，我都会陪着你。选一个创作方向，或者直接告诉我你的想法吧。
 - button "剧本改编"
 - button "馒头仔" [expanded]

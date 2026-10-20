@@ -24,7 +24,7 @@ it('reuses the native form, keeps Escape inside the requested dialog and restore
     const view = render(<NativeAccountDialog {...props(false)} />)
     expect(view.queryByRole('dialog')).toBeNull()
     view.rerender(<NativeAccountDialog {...props(true)} />)
-    expect(view.getByRole('dialog', { name: '登录漫途账号' })).toBeTruthy()
+    expect(view.getByRole('dialog', { name: '登录账号' })).toBeTruthy()
     expect(document.activeElement).toBe(view.getByRole('button', { name: '返回创作' }))
     fireEvent.keyDown(document, { key: 'Tab' })
     expect(otherEscape).toHaveBeenCalledOnce()

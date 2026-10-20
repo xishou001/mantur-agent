@@ -123,7 +123,7 @@ try {
   const html = await response.text()
   if (!response.ok) throw new Error(`packaged dsh Web returned HTTP ${String(response.status)}`)
   if (!html.includes('__DSH_BOOT__')) throw new Error('packaged dsh Web did not return its boot payload')
-  if (!html.includes('<title>ManTur Agent</title>')) throw new Error('packaged Web title is not ManTur Agent')
+  if (!html.includes('<title>CUC漫创</title>')) throw new Error('packaged Web title is not CUC漫创')
   console.log(`desktop packaged smoke: ${String(response.status)} ${new URL(url).origin}`)
   const checkpoints = await requestUpdateSave({ child: service.child, timeoutMs: 60000 })
   if (checkpoints.length !== 0) throw new Error('Fresh packaged Host returned unexpected session checkpoints')

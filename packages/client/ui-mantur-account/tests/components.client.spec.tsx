@@ -76,7 +76,7 @@ describe('Mantur account components', () => {
     const view = render(<AccountView
       state={{ phase: 'signed-out' }} controller={actions as never} t={t} showSkip onSkip={skip}
     />)
-    fireEvent.click(view.getByRole('button', { name: 'Sign in to Mantur' }))
+    fireEvent.click(view.getByRole('button', { name: 'Sign in to CUC漫创' }))
     fireEvent.click(view.getByRole('button', { name: 'Not now' }))
     expect(actions.start).toHaveBeenCalledOnce()
     expect(skip).toHaveBeenCalledOnce()
@@ -91,7 +91,7 @@ describe('Mantur account components', () => {
     expect(actions.start).toHaveBeenCalledTimes(2)
 
     view.rerender(<AccountView state={{ phase: 'signing-out' }} controller={actions as never} t={t} />)
-    expect((view.getByRole('button', { name: 'Sign in to Mantur' }) as HTMLButtonElement).disabled).toBe(true)
+    expect((view.getByRole('button', { name: 'Sign in to CUC漫创' }) as HTMLButtonElement).disabled).toBe(true)
   })
 
   it.each(['idle', 'loading', 'signed-in'] as const)('hides onboarding in %s phase', (phase) => {
@@ -126,7 +126,7 @@ describe('Mantur account components', () => {
     } as unknown as AccountOnboardingProps
     const view = render(<AccountOnboarding {...props} />)
 
-    expect(view.getByRole('heading', { name: 'Sign in to Mantur' })).toBeTruthy()
+    expect(view.getByRole('heading', { name: 'Sign in to CUC漫创' })).toBeTruthy()
     fireEvent.click(view.getByRole('button', { name: 'Not now' }))
     expect(complete).toHaveBeenCalledOnce()
   })
@@ -150,6 +150,6 @@ describe('Mantur account components', () => {
     } as unknown as AccountSectionProps
     view.rerender(<AccountSection {...signedOutProps} />)
     expect(actions.load).toHaveBeenCalledOnce()
-    expect(view.getByText('Not signed in to Mantur')).toBeTruthy()
+    expect(view.getByText('Not signed in to CUC漫创')).toBeTruthy()
   })
 })

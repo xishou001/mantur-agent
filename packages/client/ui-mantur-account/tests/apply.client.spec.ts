@@ -145,7 +145,7 @@ describe('ui-mantur-account apply', () => {
       expect(subject.slots.entries('shell.overlay').find(entry => entry.options.id === 'mantur-account-startup')?.component).toBe(NativeAccountOnboarding)
       expect(subject.slots.entries('settings.section')[0]!.component).toBe(NativeAccountSection)
       const props = (subject.slots.entries('settings.section')[0]!.inject as unknown as () => NativeAccountInjected)()
-      expect(resolveSlotLabel(subject.slots.entries('settings.section')[0]!.options.label)).toBe('漫途账号')
+      expect(resolveSlotLabel(subject.slots.entries('settings.section')[0]!.options.label)).toBe('账号')
       expect(props).not.toHaveProperty('controller')
       expect(props.hooks.nativeAccount.getSnapshot().snapshot?.authenticated).toBe(false)
       expect(props.formatExpiry(1_999_999_999_999)).toBe(new Intl.DateTimeFormat('zh', { dateStyle: 'medium', timeStyle: 'short' }).format(1_999_999_999_999))
@@ -191,8 +191,8 @@ describe('ui-mantur-account apply', () => {
       component: AccountSection,
       options: { id: 'mantur-account', order: 5 },
     })
-    expect(resolveSlotLabel(section.options.label)).toBe('漫途账号')
-    expect(subject.locale.bind('settings.manturAccount')('login')).toBe('登录漫途账号')
+    expect(resolveSlotLabel(section.options.label)).toBe('账号')
+    expect(subject.locale.bind('settings.manturAccount')('login')).toBe('登录账号')
     await fiber.dispose()
     expect(subject.slots.entries('settings.onboarding')).toEqual([])
     expect(subject.slots.entries('settings.section')).toEqual([])

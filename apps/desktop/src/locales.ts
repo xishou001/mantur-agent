@@ -1,7 +1,7 @@
 /** Native desktop copy selected from the operating-system locale. */
 
 const zh = {
-  accountUpgradeTitle: '重新登录漫途账号',
+  accountUpgradeTitle: '重新登录账号',
   accountUpgradeMessage: '此版本使用浏览器登录，需要重新授权。',
   accountUpgradeDetail: '继续会在本机私有账号目录旁保留旧账号数据备份，并清空本机登录状态。项目、草稿和模型 Key 不受影响。旧凭据不会被复用，此操作不会撤销网站上的旧设备授权。随后可在浏览器重新登录，或暂时跳过。',
   accountUpgradeButton: '备份并重新登录',
@@ -14,7 +14,7 @@ const zh = {
   directoryPickerInvalidResult: '系统目录选择窗口未返回一个有效的绝对目录路径。',
   updateDirectoryPickerPending: '请先完成或取消目录选择，再重启并更新。',
   updateShutdownUnavailable: '草稿已保存，但尚无法确认本地任务最终记录已安全保存。本次未执行安装，也未停止任务。',
-  startupFailedTitle: 'ManTur Agent 启动失败',
+  startupFailedTitle: 'CUC漫创 启动失败',
   startupFailedMessage: '无法启动本地 Agent 服务。',
   resetCacheButton: '重置缓存并重试',
   showLogButton: '查看日志',
@@ -24,9 +24,9 @@ const zh = {
   updateSavingTitle: '正在准备更新',
   updateSavingMessage: '正在等待消息提交完成并保存草稿。你可以取消等待，继续使用当前版本。',
   cancelUpdateButton: '取消更新',
-  updateReadyMessage: (version: string) => `ManTur Agent ${version} 下载完成，重启安装。重启会中断当前客户端正在执行的任务；远端任务不会因此取消，部分任务需要重新发起。是否继续？`,
+  updateReadyMessage: (version: string) => `CUC漫创 ${version} 下载完成，重启安装。重启会中断当前客户端正在执行的任务；远端任务不会因此取消，部分任务需要重新发起。是否继续？`,
   restartButton: '重启并更新',
-  aboutMenu: '关于ManTur Agent',
+  aboutMenu: '关于CUC漫创',
   editMenu: '编辑',
   viewMenu: '显示',
   windowMenu: '窗口',
@@ -58,7 +58,7 @@ type DesktopCopy = {
 }
 
 const en = {
-  accountUpgradeTitle: 'Sign in to Mantur again',
+  accountUpgradeTitle: 'Sign in to CUC漫创 again',
   accountUpgradeMessage: 'This version uses browser sign-in and needs new authorization.',
   accountUpgradeDetail: 'Continuing keeps a private backup beside the local account directory and clears local sign-in. Projects, drafts and model keys are unchanged. Old credentials are not reused, and existing website device grants are not revoked. You can then sign in through your browser or skip sign-in.',
   accountUpgradeButton: 'Back up and sign in again',
@@ -71,7 +71,7 @@ const en = {
   directoryPickerInvalidResult: 'The system directory chooser did not return one valid absolute directory path.',
   updateDirectoryPickerPending: 'Complete or cancel the directory selection before restarting to update.',
   updateShutdownUnavailable: 'Drafts were saved, but a verified final task checkpoint is unavailable. Installation was not started and tasks were not stopped.',
-  startupFailedTitle: 'ManTur Agent failed to start',
+  startupFailedTitle: 'CUC漫创 failed to start',
   startupFailedMessage: 'The local agent service could not start.',
   resetCacheButton: 'Reset cache and retry',
   showLogButton: 'Show log',
@@ -81,9 +81,9 @@ const en = {
   updateSavingTitle: 'Preparing the update',
   updateSavingMessage: 'Waiting for message submission and saving drafts. Cancel to keep using the current version.',
   cancelUpdateButton: 'Cancel update',
-  updateReadyMessage: (version: string) => `ManTur Agent ${version} has finished downloading. Restarting will interrupt tasks running in this client. Remote tasks are not cancelled, and some tasks may need to be started again. Restart and update?`,
+  updateReadyMessage: (version: string) => `CUC漫创 ${version} has finished downloading. Restarting will interrupt tasks running in this client. Remote tasks are not cancelled, and some tasks may need to be started again. Restart and update?`,
   restartButton: 'Restart and update',
-  aboutMenu: 'About ManTur Agent',
+  aboutMenu: 'About CUC漫创',
   editMenu: 'Edit',
   viewMenu: 'View',
   windowMenu: 'Window',
@@ -104,7 +104,7 @@ const en = {
   updateTransferFailed: 'Unable to check or download updates right now. Please try again later. Details are recorded in the application log.',
   updateVerificationFailed: 'The update did not pass verification. Please download it again. The installed version has not been replaced.',
   updateErrorTitle: 'Update unavailable',
-  updateErrorMessage: (detail: string) => `ManTur Agent could not complete the update.\n\n${detail}`,
+  updateErrorMessage: (detail: string) => `CUC漫创 could not complete the update.\n\n${detail}`,
   okButton: 'OK',
 } satisfies DesktopCopy
 

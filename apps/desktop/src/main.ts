@@ -26,7 +26,7 @@ import { startDesktopService, type DesktopService } from './runtime.ts'
 import { buildApplicationMenu } from './update-menu.ts'
 import { startAutoUpdates, type DesktopUpdateController, type DesktopUpdateState } from './updater.ts'
 
-const APP_NAME = 'ManTur Agent'
+const APP_NAME = 'CUC漫创'
 // Electron derives the macOS Keychain service from this name; display branding must not change it.
 const APP_STORAGE_NAME = '漫途Agent'
 const APP_ICON = fileURLToPath(new URL('../resources/mantur-app-icon.png', import.meta.url))

@@ -8,7 +8,7 @@ exports[`records account recovery dialog copy for en 1`] = `
   "failure": "Account storage could not be updated. Sign-in has not started.",
   "failureDetail": "Original account data remains in its original location or a private local backup. Projects, drafts and model keys were not changed. Quit and contact support; do not delete the account directory.",
   "message": "This version uses browser sign-in and needs new authorization.",
-  "title": "Sign in to Mantur again",
+  "title": "Sign in to CUC漫创 again",
 }
 `;
 
@@ -20,6 +20,6 @@ exports[`records account recovery dialog copy for zh-CN 1`] = `
   "failure": "无法完成账号存储更新，尚未启动登录。",
   "failureDetail": "原始账号数据仍保留在原位置或本机私有备份中；项目、草稿和模型 Key 未修改。请退出并联系支持，不要删除账号目录。",
   "message": "此版本使用浏览器登录，需要重新授权。",
-  "title": "重新登录漫途账号",
+  "title": "重新登录账号",
 }
 `;

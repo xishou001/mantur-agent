@@ -78,11 +78,11 @@ it('returns from marketplace authorization with the selected detail and complete
       } }
     })
     await page.goto(scaffold.authenticatedUrl)
-    await page.getByRole('heading', { name: '登录漫途账号' }).waitFor()
+    await page.getByRole('heading', { name: '登录账号' }).waitFor()
     expect(await page.getByRole('button', { name: '暂时跳过' }).count()).toBe(0)
     snapshot = { ...snapshot, authenticated: true, phase: 'signed-in', account: { displayName: 'Fixture creator', expiresAt: 1_999_999_999_999 } }
     await page.evaluate(publication => window.dispatchEvent(new CustomEvent('native-fixture-changed', { detail: publication })), { revision: ++revision, snapshot })
-    await page.getByRole('heading', { name: '登录漫途账号' }).waitFor({ state: 'hidden' })
+    await page.getByRole('heading', { name: '登录账号' }).waitFor({ state: 'hidden' })
     snapshot = { ...snapshot, authenticated: false, phase: 'signed-out' }
     await page.evaluate(publication => window.dispatchEvent(new CustomEvent('native-fixture-changed', { detail: publication })), { revision: ++revision, snapshot })
     const workspaceButton = page.locator('[data-workspace-footer]').getByRole('button', { name: '选择工作区' })
@@ -109,12 +109,12 @@ it('returns from marketplace authorization with the selected detail and complete
     expect(initialDraft).toBe(draft)
     expect(operations).not.toContain('skip')
     expect(operations).not.toContain('browser')
-    expect(await page.getByRole('heading', { name: '登录漫途账号' }).count()).toBe(0)
+    expect(await page.getByRole('heading', { name: '登录账号' }).count()).toBe(0)
     const project = await workspaceButton.innerText()
     const model = await page.getByRole('button', { name: '选择模型' }).innerText()
     const permission = await page.getByRole('button', { name: /访问模式/ }).innerText()
     const detail = page.getByRole('dialog', { name: skill.name, exact: true })
-    const account = page.getByRole('dialog', { name: '登录漫途账号', exact: true })
+    const account = page.getByRole('dialog', { name: '登录账号', exact: true })
     const expectDialogFocus = (dialog: ReturnType<Page['getByRole']>, name: string) => expect.poll(() => dialog.getByRole('button', { name, exact: true })
       .evaluate(element => document.activeElement === element)).toBe(true)
     const captures: string[] = []
@@ -133,9 +133,9 @@ it('returns from marketplace authorization with the selected detail and complete
     for (const kind of ['local', 'network', 'endpoint-unavailable', 'protocol'] as const) {
       await detail.getByRole('button', { name: '登录后安装' }).click()
       nextFailure = kind
-      await account.getByRole('button', { name: '登录漫途账号', exact: true }).click()
+      await account.getByRole('button', { name: '登录账号', exact: true }).click()
       await account.getByRole('alert').waitFor()
-      for (const name of ['登录漫途账号', '暂时跳过', '返回创作']) {
+      for (const name of ['登录账号', '暂时跳过', '返回创作']) {
         await expect.poll(() => account.getByRole('button', { name, exact: true }).isEnabled()).toBe(true)
       }
       expect(snapshot).toMatchObject({ busy: false, authenticated: false, failure: { kind } })
@@ -149,7 +149,7 @@ it('returns from marketplace authorization with the selected detail and complete
       expect(await page.getByRole('img', { name: 'native-reference.png', includeHidden: true }).count()).toBe(1)
     }
     await detail.getByRole('button', { name: '登录后安装' }).click()
-    await account.getByRole('button', { name: '登录漫途账号', exact: true }).click()
+    await account.getByRole('button', { name: '登录账号', exact: true }).click()
     await expect.poll(() => account.getByRole('button', { name: '正在准备登录…' }).isDisabled()).toBe(true)
     await account.getByRole('button', { name: '暂时跳过' }).click()
     await detail.getByRole('button', { name: '登录后安装' }).waitFor()
@@ -162,7 +162,7 @@ it('returns from marketplace authorization with the selected detail and complete
     await detail.getByRole('button', { name: '登录后安装' }).waitFor()
     await expectDialogFocus(detail, '登录后安装')
     await detail.getByRole('button', { name: '登录后安装' }).click()
-    await account.getByRole('button', { name: '登录漫途账号', exact: true }).click()
+    await account.getByRole('button', { name: '登录账号', exact: true }).click()
     await account.getByRole('heading', { name: '等待网页授权' }).waitFor()
     expect(await detail.count()).toBe(0)
     snapshot = { phase: 'signed-in', authenticated: true, busy: false, skipped: true, pendingRevocations: 0,
@@ -263,23 +263,23 @@ it('requires startup login and renders authorization failure and waiting at mini
       target.manturAccount = { invoke: action => target.invokeNativeAccountFixture(action), subscribe: () => () => {} }
     })
     await page.goto(scaffold.authenticatedUrl)
-    await page.getByRole('heading', { name: '登录漫途账号' }).waitFor()
+    await page.getByRole('heading', { name: '登录账号' }).waitFor()
     await mkdir(images, { recursive: true })
     const captures: string[] = []
     captures.push(`## Login\n\n${await captureStableAria(page, 'section[aria-labelledby]', scaffold.workspaceCwd)}`)
     await page.screenshot({ path: join(images, 'login-1280.png') })
     await page.setViewportSize({ width: 880, height: 600 })
-    await page.getByRole('button', { name: '登录漫途账号', exact: true }).focus()
+    await page.getByRole('button', { name: '登录账号', exact: true }).focus()
     await page.keyboard.press('Enter')
-    await page.getByRole('region', { name: '登录漫途账号', exact: true }).getByRole('alert').waitFor()
-    expect(await page.getByRole('region', { name: '登录漫途账号', exact: true }).getByRole('alert').innerText()).toBe('暂时无法连接漫途，请检查网络后重试。')
+    await page.getByRole('region', { name: '登录账号', exact: true }).getByRole('alert').waitFor()
+    expect(await page.getByRole('region', { name: '登录账号', exact: true }).getByRole('alert').innerText()).toBe('暂时无法连接CUC漫创，请检查网络后重试。')
     expect(await page.getByRole('button', { name: '重新检查登录状态' }).count()).toBe(1)
     await page.getByRole('button', { name: '重新检查登录状态' }).scrollIntoViewIfNeeded()
     await page.screenshot({ path: join(images, 'login-error-880.png') })
     for (const theme of ['light', 'dark'] as const) {
       await page.emulateMedia({ colorScheme: theme })
       await expect.poll(() => page!.locator('body').getAttribute('data-ds-dark-theme')).toBe(theme === 'dark' ? '' : null)
-      const colors = await page.getByRole('region', { name: '登录漫途账号', exact: true }).getByRole('alert').evaluate((element) => {
+      const colors = await page.getByRole('region', { name: '登录账号', exact: true }).getByRole('alert').evaluate((element) => {
         const layers: number[][] = []
         for (let parent: Element | null = element; parent !== null; parent = parent.parentElement) {
           const color = getComputedStyle(parent).backgroundColor.match(/[\d.]+/g)?.map(Number)
@@ -301,7 +301,7 @@ it('requires startup login and renders authorization failure and waiting at mini
       await page.screenshot({ path: join(images, `login-error-${theme}-880.png`) })
     }
     await page.emulateMedia({ colorScheme: 'light' })
-    await page.getByRole('button', { name: '登录漫途账号', exact: true }).click()
+    await page.getByRole('button', { name: '登录账号', exact: true }).click()
     await page.getByRole('heading', { name: '等待网页授权' }).waitFor()
     expect(await page.getByText('已登录', { exact: true }).count()).toBe(0)
     expect(await page.locator('input').count()).toBe(0)
@@ -312,8 +312,8 @@ it('requires startup login and renders authorization failure and waiting at mini
     expect(operations.filter(kind => kind === 'reopen-browser')).toHaveLength(1)
     await page.getByRole('button', { name: '取消登录' }).click()
     await page.reload()
-    await page.getByRole('heading', { name: '登录漫途账号' }).waitFor()
-    expect(await page.getByRole('button', { name: '登录漫途账号', exact: true }).count()).toBe(1)
+    await page.getByRole('heading', { name: '登录账号' }).waitFor()
+    expect(await page.getByRole('button', { name: '登录账号', exact: true }).count()).toBe(1)
     expect(console.pageErrors).toEqual([])
     await compareOrRefreshGolden(expected, captures.join('\n\n'), webSnapshotMode())
   } catch (error) {

@@ -200,7 +200,7 @@ describe('client-session startup', () => {
   it('retains the Keychain identity while displaying the current brand', async () => {
     await startup()
     expect(native.app.setName).toHaveBeenCalledExactlyOnceWith('漫途Agent')
-    expect(native.app.setAboutPanelOptions).toHaveBeenCalledWith(expect.objectContaining({ applicationName: 'ManTur Agent' }))
+    expect(native.app.setAboutPanelOptions).toHaveBeenCalledWith(expect.objectContaining({ applicationName: 'CUC漫创' }))
   })
 
   it('opens the Host without migrating or prompting to replace retired device-grant storage', async () => {

@@ -22,12 +22,12 @@ function bench(state: NativeAccountViewState = { online: true, snapshot: signedO
 describe('native account controls', () => {
   it('offers browser sign-in without password fields, a mascot or model disclaimers', async () => {
     const b = bench()
-    expect(b.getByRole('heading', { name: '登录漫途账号' })).toBeTruthy()
+    expect(b.getByRole('heading', { name: '登录账号' })).toBeTruthy()
     expect(b.container.querySelector('input')).toBeNull()
     expect(b.container.querySelector('img[src*="mantoo"]')).toBeNull()
     expect(b.queryByText(zh.nativeModelNote)).toBeNull()
     expect(b.queryByRole('button', { name: '使用 Google 登录' })).toBeNull()
-    const login = b.getByRole('button', { name: '登录漫途账号' })
+    const login = b.getByRole('button', { name: '登录账号' })
     login.focus()
     expect(document.activeElement).toBe(login)
     await act(async () => { fireEvent.click(login) })
@@ -58,13 +58,13 @@ describe('native account controls', () => {
 
   it('keeps sign-in disabled until state is known, while offline or while Main is busy', () => {
     const b = bench({ online: true })
-    expect((b.getByRole('button', { name: '登录漫途账号' }) as HTMLButtonElement).disabled).toBe(true)
+    expect((b.getByRole('button', { name: '登录账号' }) as HTMLButtonElement).disabled).toBe(true)
     for (const state of [
       { online: false, snapshot: signedOut },
       { online: true, snapshot: { ...signedOut, busy: true } },
     ]) {
       b.rerender(<NativeAccountView {...b.props} state={state} />)
-      expect((b.getByRole('button', { name: '登录漫途账号' }) as HTMLButtonElement).disabled).toBe(true)
+      expect((b.getByRole('button', { name: '登录账号' }) as HTMLButtonElement).disabled).toBe(true)
     }
     b.rerender(<NativeAccountView {...b.props} state={{ online: true, snapshot: signedOut, operation: 'browser' }} />)
     expect((b.getByRole('button', { name: '正在准备登录…' }) as HTMLButtonElement).disabled).toBe(true)
@@ -133,7 +133,7 @@ describe('native account controls', () => {
     expect(b.getByText(zh.nativeRevocationPending)).toBeTruthy()
     expect(b.getByText(zh.nativeOfflineRevocation)).toBeTruthy()
     expect((b.getByRole('button', { name: '重试撤销' }) as HTMLButtonElement).disabled).toBe(true)
-    expect((b.getByRole('button', { name: '登录漫途账号' }) as HTMLButtonElement).disabled).toBe(true)
+    expect((b.getByRole('button', { name: '登录账号' }) as HTMLButtonElement).disabled).toBe(true)
     expect((b.getByRole('button', { name: '暂时跳过' }) as HTMLButtonElement).disabled).toBe(false)
   })
 
@@ -143,7 +143,7 @@ describe('native account controls', () => {
   ])('explains %s without asking the user to edit credentials', (kind, text) => {
     const b = bench({ online: true, snapshot: signedOut, failure: { kind } })
     expect(b.getByRole('alert').textContent).toBe(text)
-    expect(b.getByRole('button', { name: '登录漫途账号' })).toBeTruthy()
+    expect(b.getByRole('button', { name: '登录账号' })).toBeTruthy()
   })
 
   it('keeps an unknown check visible and never prints raw failure values', () => {

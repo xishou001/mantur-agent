@@ -20,7 +20,7 @@ describe('Mantur desktop brand assets', () => {
     expect(manifest.build.mac.notarize).toBe(true)
   })
 
-  it('uses the approved mascot icon for both native package targets', async () => {
+  it('uses the CUC creative icon for both native package targets', async () => {
     const manifest = JSON.parse(await readFile(`${root}/apps/desktop/package.json`, 'utf8')) as {
       scripts: { 'dist:mac:arm64': string; 'dist:mac:x64': string }
       build: {
@@ -44,7 +44,7 @@ describe('Mantur desktop brand assets', () => {
       readFile(`${root}/apps/desktop/resources/mantur-app-icon.png`),
       readFile(`${root}/apps/web/public/mantur-logo.png`),
     ])
-    expect(desktopIcon).not.toEqual(webLogo)
+    expect(desktopIcon).toEqual(webLogo)
     expect(desktopIcon.subarray(0, 8)).toEqual(Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]))
     expect(desktopIcon.readUInt32BE(16)).toBe(1024)
     expect(desktopIcon.readUInt32BE(20)).toBe(1024)

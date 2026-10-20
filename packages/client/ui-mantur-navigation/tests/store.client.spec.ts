@@ -48,7 +48,7 @@ const recipeDetail = {
 const zhLaunchCopy = {
   introduction: `我要复刻 ManturHub 配方「${recipe.title}」。`,
   identifier: `配方标识：${recipe.slug}`,
-  platform: '配方平台：ManturHub',
+  platform: '配方平台：服务平台',
   source: `来源地址：${recipeDetail.sourceUrl}`,
 }
 
@@ -207,7 +207,7 @@ describe('Mantur marketplace store', () => {
     expect(sessions.create).toHaveBeenCalledWith({ workspaceId: 'workspace-1' })
     expect(open).toHaveBeenCalledWith('session-recipe')
     expect(send).toHaveBeenCalledWith(expect.stringContaining(`配方标识：${recipe.slug}`))
-    expect(send).toHaveBeenCalledWith(expect.stringContaining('配方平台：ManturHub'))
+    expect(send).toHaveBeenCalledWith(expect.stringContaining('配方平台：服务平台'))
     expect(send).toHaveBeenCalledWith(expect.stringContaining(`来源地址：${recipeDetail.sourceUrl}`))
     expect(send).toHaveBeenCalledWith(expect.stringContaining(recipeDetail.agentPayload))
   })
@@ -239,7 +239,7 @@ describe('Mantur marketplace store', () => {
     const enLaunchCopy = {
       introduction: `I want to recreate the ManturHub Recipe “${recipe.title}”.`,
       identifier: `Recipe ID: ${recipe.slug}`,
-      platform: 'Recipe platform: ManturHub',
+      platform: 'Recipe platform: 服务平台',
     }
     await expect(store.startRecipe(enLaunchCopy)).resolves.toBe(true)
     const message = String(send.mock.calls[0]?.[0])

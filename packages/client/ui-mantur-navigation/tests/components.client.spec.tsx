@@ -162,7 +162,7 @@ describe('Mantur marketplace navigation', () => {
       />,
     )
     expect(screen.getByRole('heading', { name: '配方广场' })).toBeTruthy()
-    expect(screen.getByText('从经过验证的优秀案例出发，替换成你的内容，让漫途复刻同款效果。')).toBeTruthy()
+    expect(screen.getByText('从经过验证的优秀案例出发，替换成你的内容，让CUC漫创复刻同款效果。')).toBeTruthy()
     expect(screen.getByText('还没有找到匹配的配方，换个关键词试试。')).toBeTruthy()
   })
 
@@ -250,9 +250,9 @@ describe('Mantur marketplace navigation', () => {
     fireEvent.click(screen.getByRole('button', { name: '交给 Agent 复刻' }))
     await vi.waitFor(() => {
       expect(props.controllerMocks.startRecipe).toHaveBeenCalledWith({
-        introduction: `我要复刻 ManturHub 配方「${detail.title}」。`,
+        introduction: `我要复刻 服务平台 配方「${detail.title}」。`,
         identifier: `配方标识：${detail.slug}`,
-        platform: '配方平台：ManturHub',
+        platform: '配方平台：服务平台',
         source: `来源地址：${detail.sourceUrl}`,
       })
     })
@@ -314,7 +314,7 @@ describe('Mantur marketplace navigation', () => {
         t={t}
       />,
     )
-    expect(screen.getByText('正在连接 ManturHub…')).toBeTruthy()
+    expect(screen.getByText('正在连接 服务平台…')).toBeTruthy()
     expect(loadingProps.controllerMocks.ensureSkillCatalog).toHaveBeenCalledOnce()
 
     const failedProps = marketplaceProps({ phase: 'failed' })
@@ -435,7 +435,7 @@ describe('Mantur marketplace navigation', () => {
         t={t}
       />,
     )
-    expect(screen.getByRole('alert').textContent).toContain('ManturHub 登录已失效')
+    expect(screen.getByRole('alert').textContent).toContain('服务平台 登录已失效')
     fireEvent.click(screen.getByRole('button', { name: /故事导演/ }))
     expect(directFailureProps.controllerMocks.openDetail).toHaveBeenCalledWith(listed.slug)
 
@@ -633,7 +633,7 @@ describe('Mantur marketplace navigation', () => {
       />,
     )
     expect(screen.getByText('技能安装失败，原有文件没有被覆盖。请稍后重试。')).toBeTruthy()
-    expect(screen.getByText('ManturHub 登录没有完成，请重试。')).toBeTruthy()
+    expect(screen.getByText('服务平台 登录没有完成，请重试。')).toBeTruthy()
     const unavailableProps = marketplaceProps({ ...base, detail: { ...story, usesOperators: [] }, loginPhase: 'unavailable' })
     view.rerender(
       <MarketplacePage {...globalProps} {...unavailableProps} activePage={MANTUR_MARKET_PAGES.skills} closePage={vi.fn()} t={t} />,
@@ -658,7 +658,7 @@ describe('Mantur marketplace navigation', () => {
       />,
     )
     expect(screen.getByText('MANT-1234')).toBeTruthy()
-    expect(screen.getByRole('link', { name: '打开 ManturHub 登录页' }).getAttribute('href')).toBe('https://hub.mantur.ai/device')
+    expect(screen.getByRole('link', { name: '打开 服务平台 登录页' }).getAttribute('href')).toBe('https://hub.mantur.ai/device')
     fireEvent.click(screen.getByRole('button', { name: '取消登录' }))
     expect(loginProps.controllerMocks.cancelLogin).toHaveBeenCalledOnce()
   })
@@ -730,7 +730,7 @@ describe('Mantur marketplace navigation', () => {
         {...globalProps} {...loadingProps} activePage={MANTUR_MARKET_PAGES.recipes} closePage={vi.fn()} t={t}
       />,
     )
-    expect(screen.getByText('正在从 ManturHub 取回配方…')).toBeTruthy()
+    expect(screen.getByText('正在从 服务平台 取回配方…')).toBeTruthy()
 
     const idleProps = marketplaceProps(emptyReady, { phase: 'idle' })
     view.rerender(
@@ -874,9 +874,9 @@ describe('Mantur marketplace navigation', () => {
     await vi.waitFor(() => { expect(props.controllerMocks.startRecipe).toHaveBeenCalledOnce() })
     expect(closePage).not.toHaveBeenCalled()
     expect(props.controllerMocks.startRecipe).toHaveBeenCalledWith({
-      introduction: `我要复刻 ManturHub 配方「${imageDetail.title}」。`,
+      introduction: `我要复刻 服务平台 配方「${imageDetail.title}」。`,
       identifier: `配方标识：${imageDetail.slug}`,
-      platform: '配方平台：ManturHub',
+      platform: '配方平台：服务平台',
     })
 
     view.rerender(

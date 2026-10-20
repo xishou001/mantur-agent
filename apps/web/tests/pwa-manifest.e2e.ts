@@ -28,8 +28,8 @@ it('ships install metadata with the built web application', async () => {
   expect(manifest).toEqual(PROFILE === 'mantur'
     ? {
       id: '/',
-      name: 'ManTur Agent',
-      short_name: 'ManTur Agent',
+      name: 'CUC漫创',
+      short_name: 'CUC漫创',
       start_url: '/',
       scope: '/',
       display: 'fullscreen',
