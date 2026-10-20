@@ -6,6 +6,7 @@ import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { app, BrowserWindow, dialog, ipcMain, Menu, safeStorage, shell } from 'electron'
 import electronUpdater from 'electron-updater'
+import { APP_UPDATES_ENABLED } from './app-update-policy.ts'
 import { clearDesktopConnectionCookies } from './browser-session.ts'
 import { requestUpdateSave } from './update-save.ts'
 import { installUpdateBridge } from './update-bridge.ts'
@@ -262,7 +263,7 @@ async function stopService(): Promise<void> {
 }
 
 function startUpdates(): void {
-  if (!app.isPackaged || updates !== undefined) return
+  if (!APP_UPDATES_ENABLED || !app.isPackaged || updates !== undefined) return
   const copy = desktopCopy(app.getLocale())
   const { autoUpdater } = electronUpdater
   updates = startAutoUpdates({
