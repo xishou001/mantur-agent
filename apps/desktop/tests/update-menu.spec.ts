@@ -100,5 +100,6 @@ describe('desktop update menu', () => {
   it('keeps release checks disabled until a packaged updater is ready', () => {
     const menu = menuFor('darwin', { kind: 'idle' }, { updatesEnabled: false })
     expect(findItem(menu, 'desktop-check-update')?.enabled).toBe(false)
+    expect(findItem(menu, 'desktop-check-update')?.visible).toBe(false)
   })
 })

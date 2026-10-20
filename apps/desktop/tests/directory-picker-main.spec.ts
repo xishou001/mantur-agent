@@ -6,6 +6,7 @@ import { desktopCopy } from '../src/locales.ts'
 import type { StartAutoUpdatesOptions } from '../src/updater.ts'
 
 const native = vi.hoisted(() => ({
+  updatesEnabled: true,
   app: {
     setName: vi.fn(), getVersion: () => '1.0.0', getLocale: () => 'en', isPackaged: true,
     commandLine: { hasSwitch: () => false }, requestSingleInstanceLock: () => true,
@@ -40,6 +41,7 @@ vi.mock('electron', () => ({
   dialog: native.dialog, Menu: { setApplicationMenu: vi.fn(), buildFromTemplate: vi.fn() },
   safeStorage: {}, shell: { openExternal: vi.fn(), showItemInFolder: vi.fn() },
 }))
+vi.mock('../src/app-update-policy.ts', () => ({ get APP_UPDATES_ENABLED() { return native.updatesEnabled } }))
 vi.mock('electron-updater', () => ({ default: { autoUpdater: {} } }))
 vi.mock('../src/desktop-state.ts', () => ({
   initializeDesktopPaths: () => ({
@@ -64,6 +66,7 @@ vi.mock('../src/updater.ts', () => ({ startAutoUpdates: native.startAutoUpdates 
 const platform = Object.getOwnPropertyDescriptor(process, 'platform')!
 const resourcesPath = Object.getOwnPropertyDescriptor(process, 'resourcesPath')
 beforeEach(() => {
+  native.updatesEnabled = true
   vi.resetModules()
   vi.clearAllMocks()
   vi.spyOn(process, 'on').mockReturnValue(process)
@@ -107,6 +110,15 @@ async function startup() {
 }
 
 describe('desktop directory picker wiring', () => {
+  it('keeps the Host running without starting the upstream updater in CUC builds', async () => {
+    native.updatesEnabled = false
+    await import('../src/main.ts')
+    await vi.waitFor(() => { expect(native.window.loadURL).toHaveBeenCalledExactlyOnceWith('http://127.0.0.1:40001/') })
+    expect(native.startAutoUpdates).not.toHaveBeenCalled()
+    expect(native.requestUpdateSave).not.toHaveBeenCalled()
+    expect(native.service.stopAndVerifyExit).not.toHaveBeenCalled()
+  })
+
   it('waits for old connection cookies to be removed before loading the new Host', async () => {
     const cleared = Promise.withResolvers<never[]>()
     native.window.webContents.session.cookies.get.mockReturnValueOnce(cleared.promise)

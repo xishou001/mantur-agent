@@ -66,6 +66,7 @@ function updateItems(options: BuildApplicationMenuOptions): MenuItemConstructorO
     },
     {
       id: 'desktop-check-update',
+      visible: options.updatesEnabled,
       label: copy.checkForUpdates,
       enabled: options.updatesEnabled && !busy && state.kind !== 'ready',
       click: options.onCheck,
