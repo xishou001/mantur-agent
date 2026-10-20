@@ -25,7 +25,7 @@ Users can begin a draft before choosing a project. The first send prepares one p
 <a id="use-this-package"></a>
 ## Use this package
 
-The [Mantur bundle](../../bundle/mantur-app/README.md) mounts this plugin beside the Workspace registry and durable storage. Its desktop carrier supplies the operating system's Documents directory with a `漫途项目` child; a deployment without that default requires an explicit root selection. The creation caller supplies the initial localized project title.
+The [Mantur bundle](../../bundle/mantur-app/README.md) mounts this plugin beside the Workspace registry and durable storage. Its desktop carrier supplies the operating system's Documents directory with a `CUC漫创` child; a deployment without that default requires an explicit root selection. The creation caller supplies the initial localized project title.
 
 | Field | Default | Meaning |
 |---|---|---|
