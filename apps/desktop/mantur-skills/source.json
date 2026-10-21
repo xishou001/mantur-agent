@@ -61,10 +61,10 @@
       "name": "mantur-drama-visual-studio",
       "title": "全自动漫剧生产线（可视化）",
       "version": "1.2.9",
-      "digest": "62e42047f36d2efda59fbbd7905bd6180b13640b535bca86d5fc032315234a97",
-      "archive": "archives/mantur-drama-visual-studio-1.2.9.zip",
-      "archiveSha256": "980bc9e9f352f1170e0bdfe641a08b7fbaf23854b9f4171d7cc80f1ba674f73b",
-      "archiveBytes": 861314,
+      "digest": "6d17e8b438a8250f6ec6a874b68a967971ed88f97c398fdf095ec8301deca772",
+      "archive": "archives/mantur-drama-visual-studio-1.2.9-cuc.zip",
+      "archiveSha256": "44df9ec716f216c76ab65577b1bc14348843625b7d26de1b80a1441f3fdc9bbb",
+      "archiveBytes": 858239,
       "files": [
         {
           "path": "SKILL.md",
@@ -868,8 +868,8 @@
         },
         {
           "path": "scripts/access-base.mjs",
-          "bytes": 26702,
-          "sha256": "3fd8e77e17c982bf6f617fe295f15eb0b5c80588f8fa443de13dc50b2f6e86af"
+          "bytes": 27006,
+          "sha256": "e1ebc24dee2a5f2d4e1d9801992590f8b204fc080e58fa2f44a2931cf17ecfa8"
         },
         {
           "path": "scripts/access-core.mjs",

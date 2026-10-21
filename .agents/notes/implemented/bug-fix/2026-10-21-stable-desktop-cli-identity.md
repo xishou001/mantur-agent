@@ -12,7 +12,7 @@ The upstream CLI binds saved calls to the desktop bridge secret. Main intentiona
 
 Main adds a domain-separated SHA-256 digest of the selected origin, environment, and active credential to each broker descriptor. It carries no authorization power. Per-command capabilities remain random, scoped, expiring, and independently revoked. The descriptor IPC parser requires the digest.
 
-The application pins the official CLI 1.2.10 archive and applies an explicit two-module overlay during resource preparation. CLI descriptor validation requires the digest, and call identity derives from it instead of the command capability. Reauthorization or credential rotation invalidates prior call identity. The application bundles the verified public production skill 1.2.9; user or project files are not rewritten.
+The application pins the official CLI 1.2.10 archive and applies an explicit two-module overlay during resource preparation. CLI descriptor validation requires the digest, and call identity derives from it instead of the command capability. Reauthorization or credential rotation invalidates prior call identity. The application bundles the verified public production skill 1.2.9; user or project files are not rewritten. Its single-module adapter overlay retains desktop-managed identity, requires a private descriptor, and preserves standalone and connector behavior. Main supplies explicit CLI and existing CLI state paths so adapter discovery never interprets a shell shim as an npm package or falls back to a global installation.
 
 This supplements the [browser account decision](../architecture/2026-09-08-browser-account-authorization.md). Its Main ownership, private descriptor, logout and transport rules remain active; no earlier note is fully superseded.
 

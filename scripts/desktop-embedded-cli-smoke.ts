@@ -31,7 +31,7 @@ export async function smokeEmbeddedCli(options: EmbeddedCliOptions): Promise<voi
     encoding: 'utf8',
     timeout: 30_000,
     shell: windows,
-    env: embeddedCliEnvironment(bin, { SystemRoot: process.env.SystemRoot }),
+    env: embeddedCliEnvironment(bin, { SystemRoot: process.env.SystemRoot }, options.resourceRoot),
   })
   if (result.error !== undefined) throw result.error
   if (result.status !== 0 || result.stdout.trim() !== '1.2.10') {

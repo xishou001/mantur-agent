@@ -68,6 +68,11 @@ jobs:
           [System.IO.File]::WriteAllText($smokePath, $smoke)
       - name: Build native installer
         run: pnpm run ${{ matrix.script }}
+      - name: Verify prepared Windows CLI resources
+        if: runner.os == 'Windows'
+        env:
+          DSH_TEST_EMBEDDED_CLI: '1'
+        run: pnpm exec vitest run apps/desktop/tests/embedded-cli.spec.ts --testTimeout 60000 --hookTimeout 60000
       - name: Smoke packaged dependency closure
         run: pnpm run desktop:smoke
       - uses: actions/upload-artifact@v7
