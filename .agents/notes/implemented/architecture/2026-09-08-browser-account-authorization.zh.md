@@ -10,6 +10,9 @@ Status: implemented
 
 桌面账号与内置 CLI 需要共用一个可撤销的设备身份。独立密码表单重复网站登录，共享网站 Cookie 或平台 Key 会暴露可复用的账号权限。丢失的响应和旧授权 attempt 不能恢复或撤销较新的登录。
 
+[稳定 CLI 身份决策](../bug-fix/2026-10-21-stable-desktop-cli-identity.zh.md)增加了经过审核的资源准备补丁，并将调用身份与每次命令的授权分开。
+
+
 ## Decision
 
 桌面端将 `漫途Agent` 保留为 Electron 存储身份，与界面品牌名称分开。Electron 根据 `app.getName()` 确定 macOS 钥匙串服务；改变该身份会使已有的系统加密 grant 无法读取。Main 在打开账号存储前设置存储名称，无需复制凭据或增加其他解密路径。
