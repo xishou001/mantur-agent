@@ -3,7 +3,7 @@ import { spawn, execFile } from 'node:child_process'
 import { createHash } from 'node:crypto'
 import { readFile, writeFile, unlink } from 'node:fs/promises'
 import { createServer } from 'node:http'
-import { join } from 'node:path'
+import { dirname, join } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import { promisify } from 'node:util'
 import { beforeAll, describe, expect, it, onTestFinished } from 'vitest'
@@ -16,7 +16,7 @@ const nativeBrokerBench: typeof legacyBench = (api, leaseMs) => legacyBench(api,
 const cliPackage = process.env.DSH_NATIVE_CLI_PACKAGE
 const cliTarball = process.env.DSH_NATIVE_CLI_TARBALL
 const execFileAsync = promisify(execFile)
-const packageHash = '98d2eefe59566b220950ac201f7ad133c47e469e3e0dfcad180027d6a623f86d'
+const packageHash = 'a486b168988239485fa45e01ad24a8c319eca5eda0c1587fe9b15c1a244e99a0'
 
 function location(path: string): string {
   if (cliPackage === undefined) throw new Error('DSH_NATIVE_CLI_PACKAGE must name the fixed unpacked CLI')
@@ -26,7 +26,7 @@ function location(path: string): string {
 async function saveDescriptor(root: string, descriptor: NativeBrokerDescriptor): Promise<string> {
   const path = join(root, 'cli-auth.json')
   await writeFile(path, JSON.stringify(descriptor), { flag: 'wx', mode: 0o600 })
-  onTestFinished(() => unlink(path))
+  onTestFinished(() => unlink(path).catch((error: unknown) => { if (!(error instanceof Error && 'code' in error && error.code === 'ENOENT')) throw error }))
   return path
 }
 
@@ -35,7 +35,7 @@ async function command(path: string, args: readonly string[], signal?: AbortSign
   const stderr: Buffer[] = []
   const env: NodeJS.ProcessEnv = {
     PATH: process.env.PATH, SystemRoot: process.env.SystemRoot, TEMP: process.env.TEMP, TMP: process.env.TMP,
-    MANTURHUB_IDENTITY_MODE: 'desktop-managed', MANTURHUB_AGENT_AUTH: path,
+    MANTURHUB_IDENTITY_MODE: 'desktop-managed', MANTURHUB_AGENT_AUTH: path, MANTURHUB_CONFIG_DIR: dirname(path),
     MANTURHUB_KEY: 'isolated-legacy-canary-must-not-be-used', MANTURHUB_BASE: 'https://other.invalid',
     MANTURHUB_DISABLE_UPDATE_CHECK: '1', MANTURHUB_DISABLE_SKILL_UPDATE_CHECK: '1',
   }
@@ -66,18 +66,97 @@ function script(source: string): string[] {
 }
 
 // The pinned release artifact is explicit input; ordinary CI does not claim this joint acceptance.
-describe.skipIf(cliPackage === undefined && cliTarball === undefined || process.platform === 'win32')('fixed CLI 1.2.6 and Main broker joint transport (POSIX descriptor fixture)', () => {
+describe.skipIf(cliPackage === undefined && cliTarball === undefined || process.platform === 'win32')('fixed CLI 1.2.10 and Main broker joint transport (POSIX descriptor fixture)', () => {
   beforeAll(async () => {
     if (cliPackage === undefined || cliTarball === undefined) throw new Error('Both fixed CLI package and tarball paths are required')
     expect(createHash('sha256').update(await readFile(cliTarball)).digest('hex')).toBe(packageHash)
     const listed = await execFileAsync('tar', ['-tzf', cliTarball], { encoding: 'utf8' })
     const files = listed.stdout.trim().split('\n').filter(path => !path.endsWith('/'))
-    expect(files).toHaveLength(30)
+    expect(files).toHaveLength(32)
     for (const path of files) {
       expect(path.startsWith('package/')).toBe(true)
       const packed = await execFileAsync('tar', ['-xOf', cliTarball, path], { encoding: 'buffer' })
+      if (['package/lib/agent-auth.js', 'package/lib/identity-binding.js'].includes(path)) continue
       expect(await readFile(location(path.slice('package/'.length))), path).toEqual(packed.stdout)
     }
+  })
+
+  it('binds independent command leases to one identity and changes identity after reauthorization', async () => {
+    const b = await nativeBrokerBench((_request, response) => { response.end('{}') })
+    const readIdentity = async () => {
+      const scope = await nativeBrokerScope(b.broker)
+      const path = await saveDescriptor(b.root, scope.descriptor)
+      const result = await command(path, ['--input-type=module', '--eval',
+        `import {identityBinding} from ${JSON.stringify(pathToFileURL(location('lib/identity-binding.js')).href)}; console.log(identityBinding())`])
+      await unlink(path)
+      scope.release()
+      await scope.done
+      expect(result.code, result.stderr).toBe(0)
+      expect(result.stdout.trim()).toMatch(/^[a-f0-9]{64}$/u)
+      return { binding: result.stdout.trim(), capability: scope.descriptor.bridge_secret }
+    }
+    const first = await readIdentity()
+    const second = await readIdentity()
+    expect(second.capability).not.toBe(first.capability)
+    expect(second.binding).toBe(first.binding)
+    await b.controller.signOut()
+    await b.controller.startBrowser()
+    await expect.poll(() => b.controller.getSnapshot().authenticated).toBe(true)
+    const changed = await readIdentity()
+    expect(changed.binding).not.toBe(first.binding)
+  })
+
+  it('rejects an invalid stable identity before any authenticated request', async () => {
+    const b = await nativeBrokerBench((_request, response) => { response.end('{}') })
+    const scope = await nativeBrokerScope(b.broker)
+    const path = await saveDescriptor(b.root, { ...scope.descriptor, identity_binding: 'invalid' })
+    const result = await command(path, ['--input-type=module', '--eval',
+      `import {identityBinding} from ${JSON.stringify(pathToFileURL(location('lib/identity-binding.js')).href)}; identityBinding()`])
+    scope.release()
+    await scope.done
+    expect(result.code).not.toBe(0)
+    expect(result.stderr).toContain('MANTUR_BROKER_DESCRIPTOR_INVALID')
+    expect(b.observed).toHaveLength(0)
+  })
+
+  it('accepts a quote in a new command scope but rejects an old-account confirmation', async () => {
+    let invocations = 0
+    const b = await nativeBrokerBench((request, response) => {
+      response.setHeader('Content-Type', 'application/json')
+      let data: object
+      if (request.url?.endsWith('/quote')) data = { estimatedPoints: 60, priceVersionTag: 'isolated-price-v1', enoughBalance: true, balance: 1000 }
+      else if (request.url?.endsWith('/invoke')) {
+        invocations += 1
+        data = { status: 'succeeded', output: { isolated: true } }
+      } else data = { apiCode: 'op.image.generate', name: 'Isolated image operator',
+        inputSchema: { type: 'object', properties: { prompt: { type: 'string' } }, required: ['prompt'] } }
+      if (request.url?.includes('/operators?')) data = { records: [data], pages: 1 }
+      response.end(JSON.stringify({ code: 0, data }))
+    })
+    const run = async (token?: string) => {
+      const scope = await nativeBrokerScope(b.broker)
+      const path = await saveDescriptor(b.root, scope.descriptor)
+      try { return await command(path, [location('bin/cli.js'), 'run', 'op.image.generate', '--json', '{"prompt":"isolated fixture"}',
+        ...(token ? ['--confirm', token] : [])]) }
+      finally { await unlink(path); scope.release(); await scope.done }
+    }
+    const first = await run()
+    const second = await run()
+    expect(first.code, first.stderr).toBe(3)
+    expect(second.code, second.stderr).toBe(3)
+    const firstToken = (JSON.parse(first.stderr) as { confirmation_token: string }).confirmation_token
+    const secondToken = (JSON.parse(second.stderr) as { confirmation_token: string }).confirmation_token
+    expect(invocations).toBe(0)
+    const accepted = await run(firstToken)
+    expect(accepted.code, accepted.stderr).toBe(0)
+    expect(invocations).toBe(1)
+    await b.controller.signOut()
+    await b.controller.startBrowser()
+    await expect.poll(() => b.controller.getSnapshot().authenticated).toBe(true)
+    const rejected = await run(secondToken)
+    expect(rejected.code, rejected.stderr).toBe(1)
+    expect(rejected.stderr).toContain('报价已变化或确认标识无效')
+    expect(invocations).toBe(1)
   })
 
   it('runs the real balance command after browser code exchange, without a CLI login or ambient API key', async () => {

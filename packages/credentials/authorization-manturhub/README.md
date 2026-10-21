@@ -7,6 +7,9 @@ kind: "package-reference"
 
 English | [中文](README.zh.md)
 
+Desktop broker descriptors also carry a required non-authorizing `identity_binding` digest. It stays stable for an active credential across independent command leases and changes when that credential changes; it never substitutes for the per-command bearer.
+
+
 ## Summary
 
 This Host package routes ManturHub requests to the selected production or test deployment. `standalone` identity owns per-origin credential records and device-code flows; `desktop-managed` identity delegates to Electron Main and never reads those records. The generated Remote exposes the identity mode and sanitized account status, never an API key or environment configuration.

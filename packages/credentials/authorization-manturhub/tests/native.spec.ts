@@ -19,7 +19,7 @@ const signedOut = { kind: 'signed-out', environment: { MANTURHUB_IDENTITY_MODE: 
 const authorized = () => ({
   kind: 'authorized', environment: { MANTURHUB_IDENTITY_MODE: 'desktop-managed', MANTURHUB_AGENT_AUTH: resolve('descriptor.json') },
   descriptor: { version: 2, proxy_origin: 'http://127.0.0.1:12345', public_base_url: config.origin,
-    bridge_secret: `mbp_v2_${'a'.repeat(43)}`, environment: 'test', environment_label: 'Test',
+    identity_binding: 'b'.repeat(64), bridge_secret: `mbp_v2_${'a'.repeat(43)}`, environment: 'test', environment_label: 'Test',
     expires_at: new Date(Date.now() + 60000).toISOString() },
 })
 type Frame = { type: string; id: string; scopeId?: string }

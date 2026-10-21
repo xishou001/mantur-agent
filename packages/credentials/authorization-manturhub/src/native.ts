@@ -17,6 +17,7 @@ const snapshotSchema = z.strictObject({
 })
 const descriptorSchema = z.strictObject({
   version: z.literal(2), proxy_origin: z.url(), public_base_url: z.url(), bridge_secret: z.string().regex(/^mbp_v2_[A-Za-z0-9_-]{43}$/u),
+  identity_binding: z.string().regex(/^[a-f0-9]{64}$/u),
   environment: z.enum(['production', 'test']), environment_label: z.string().min(1).max(80), expires_at: z.iso.datetime({ offset: true }),
 })
 const environmentSchema = z.strictObject({

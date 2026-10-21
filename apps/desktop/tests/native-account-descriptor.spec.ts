@@ -7,7 +7,7 @@ import type { NativeBrokerDescriptor } from '../src/auth/broker.ts'
 import { withNativeBrokerDescriptor } from '../src/auth/descriptor.ts'
 
 const descriptor: NativeBrokerDescriptor = { version: 2, proxy_origin: 'http://127.0.0.1:40001',
-  public_base_url: 'https://auth.example', bridge_secret: `mbp_v2_${'A'.repeat(43)}`, environment: 'test',
+  public_base_url: 'https://auth.example', identity_binding: 'b'.repeat(64), bridge_secret: `mbp_v2_${'A'.repeat(43)}`, environment: 'test',
   environment_label: 'Isolated descriptor test', expires_at: '2099-01-01T00:00:00Z' }
 
 async function rootDirectory() {

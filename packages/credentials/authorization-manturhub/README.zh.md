@@ -7,6 +7,9 @@ kind: "package-reference"
 
 [English](README.md) | 中文
 
+桌面代理描述文件还携带必需的 `identity_binding` 身份摘要，它不能用于授权。同一有效凭据下，独立命令租约的摘要保持稳定；凭据改变后摘要改变。它不会替代每次命令的授权凭据。
+
+
 ## 概述
 
 这个 Host 包把 ManturHub 请求路由到已选的线上或测试部署。`standalone` 身份拥有逐 origin 的凭据记录与设备码 flow；`desktop-managed` 身份委托 Electron Main，绝不读取这些记录。生成的 Remote 暴露身份模式与脱敏账号状态，不返回 API Key 或环境配置。

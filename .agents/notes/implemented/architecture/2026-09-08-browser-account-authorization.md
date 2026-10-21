@@ -10,6 +10,9 @@ The [client-session migration](2026-09-17-client-session-migration.md) replaces 
 
 A desktop account and its embedded CLI need one revocable device identity. A separate password form duplicates website login, while sharing a website Cookie or platform Key exposes reusable account authority. Lost responses and old authorization attempts must not revive or revoke a newer login.
 
+The [stable CLI identity decision](../bug-fix/2026-10-21-stable-desktop-cli-identity.md) adds a reviewed preparation overlay and separates call identity from per-command authorization.
+
+
 ## Decision
 
 The desktop retains `漫途Agent` as Electron's storage identity independently of visible branding. Electron derives the macOS Keychain service from `app.getName()`; changing this identity makes existing OS-encrypted grants unreadable. Main sets the storage name before opening account storage. No credential copying or alternate decryption path is needed.

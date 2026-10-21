@@ -2,9 +2,11 @@
 
 English | [中文](README.zh.md)
 
-This directory pins the MIT-licensed `@manturhub/cli` 1.2.6 delivery from source commit `c9b569d198f1b65690a28b5b1f2584b9c2e76f82`. The archive is 58,619 bytes with SHA-256 `98d2eefe59566b220950ac201f7ad133c47e469e3e0dfcad180027d6a623f86d`; its 30 entries include the upstream license and unmodified CLI source.
+This directory pins the MIT-licensed `@manturhub/cli` 1.2.10 package from the official npm registry. The unmodified archive is 66,425 bytes with SHA-256 `a486b168988239485fa45e01ad24a8c319eca5eda0c1587fe9b15c1a244e99a0`; its 32 entries include the upstream license.
 
 [prepare-cli.ts](../scripts/prepare-cli.ts) verifies the archive, installs only its locked production dependencies with `npm ci`, and prepares desktop resources with retained license files. The independent lock pins `@vercel/detect-agent` 1.2.1 under Apache-2.0, plus the CLI’s JSON-schema validators and `libsql` 0.5.29 with its platform-specific native dependencies. It does not change the root pnpm graph or install a global command.
+
+The preparation applies the reviewed `desktop-stable-identity-v1` overlay to two CLI modules after archive verification. The descriptor parser requires a 64-character identity digest supplied by Main; identity binding hashes that digest instead of the per-command bridge secret. The bridge secret remains the only local command authorization capability. Missing or malformed identity fields fail closed. See the [stable identity decision](../../../.agents/notes/implemented/bug-fix/2026-10-21-stable-desktop-cli-identity.md).
 
 Run the resource preparation from the repository root:
 

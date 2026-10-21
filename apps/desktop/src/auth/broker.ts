@@ -1,5 +1,5 @@
 /** Main-owned broker-v2 transport; device bearers stay inside credential-scoped streaming operations. */
-import { randomBytes } from 'node:crypto'
+import { createHash, randomBytes } from 'node:crypto'
 import { createServer, type IncomingMessage, type ServerResponse } from 'node:http'
 import { Readable } from 'node:stream'
 import { finished, pipeline } from 'node:stream/promises'
@@ -14,6 +14,8 @@ export interface NativeBrokerDescriptor {
   readonly proxy_origin: string
   readonly public_base_url: string
   readonly bridge_secret: string
+  /** Non-authorizing digest of the active credential, stable across command leases. */
+  readonly identity_binding: string
   readonly environment: NativeSecrets['environment']
   readonly environment_label: string
   readonly expires_at: string
@@ -129,6 +131,8 @@ export class NativeCommandBroker {
         try {
           scope.signal.throwIfAborted()
           await execute({ version: 2, proxy_origin: proxy, public_base_url: this.origin, bridge_secret: capability,
+            identity_binding: createHash('sha256').update(JSON.stringify({ purpose: 'mantur-cli-identity-v1',
+              origin: this.origin, environment: this.options.environment, credential: secrets.credential })).digest('hex'),
             environment: this.options.environment, environment_label: this.options.environmentLabel,
             expires_at: new Date(expiresAt).toISOString() }, scope.signal)
           scope.signal.throwIfAborted()
