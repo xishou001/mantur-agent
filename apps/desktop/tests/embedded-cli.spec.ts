@@ -1,6 +1,10 @@
 /** Embedded CLI resources through the real command consumer; these fixtures do not open Electron windows. */
-import { cp, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises'
-import { tmpdir } from 'node:os'
+import { execFile } from 'node:child_process'
+import { promisify } from 'node:util'
+import { NativeCommandBroker } from '../src/auth/broker.ts'
+import { withNativeBrokerDescriptor } from '../src/auth/descriptor.ts'
+import { cp, mkdtemp, readFile, realpath, rm, writeFile } from 'node:fs/promises'
+import { homedir, tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { describe, expect, it, onTestFinished } from 'vitest'
@@ -37,11 +41,18 @@ it('requires prepared resources and never chooses a global CLI when they are abs
 })
 
 it('replaces case variants of PATH and fixes desktop identity while preserving unrelated variables', () => {
-  const environment = embeddedCliEnvironment('/owned/bin', { Path: '/ambient/bin', MANTURHUB_IDENTITY_MODE: 'standalone', LANG: 'C' })
+  const environment = embeddedCliEnvironment('/owned/bin', { Path: '/ambient/bin', MANTURHUB_IDENTITY_MODE: 'standalone', LANG: 'C',
+    MANTURHUB_CLI_ENTRY: '/ambient/old-cli.js', MANTURHUB_CONFIG_DIR: '/ambient/old-config',
+    ManturHub_Cli_Entry: '/ambient/mixed-case.js', manturhub_config_dir: '/ambient/mixed-case-config' }, '/owned/resources')
   expect(environment.PATH).toBe('/owned/bin' + (process.platform === 'win32' ? ';' : ':') + '/ambient/bin')
   expect(environment.Path).toBeUndefined()
   expect(environment.MANTURHUB_IDENTITY_MODE).toBe('desktop-managed')
   expect(environment.LANG).toBe('C')
+  expect(environment.ManturHub_Cli_Entry).toBeUndefined()
+  expect(environment.manturhub_config_dir).toBeUndefined()
+  expect(environment.MANTURHUB_CLI_ENTRY).toBe(join('/owned/resources', 'node_modules/@manturhub/cli/bin/cli.js'))
+  expect(environment.MANTURHUB_CONFIG_DIR).toBe('/ambient/old-config')
+  expect(embeddedCliEnvironment('/owned/bin', {}, '/owned/resources').MANTURHUB_CONFIG_DIR).toBe(join(homedir(), '.manturhub'))
 })
 
 // Preparing the reviewed artifact is required evidence for distribution; ordinary source tests need not install it.
@@ -77,7 +88,8 @@ describe.skipIf(process.env.DSH_TEST_EMBEDDED_CLI !== '1')('prepared embedded CL
     const root = await profile()
     const bin = await prepareEmbeddedCli({ resourceRoot, userData: root,
       executable: process.env.DSH_EMBEDDED_CLI_EXECUTABLE ?? process.execPath, platform: 'darwin' })
-    const environment = embeddedCliEnvironment(bin, { PATH: '/usr/bin:/bin', SystemRoot: process.env.SystemRoot })
+    const environment = embeddedCliEnvironment(bin, { PATH: '/usr/bin:/bin', SystemRoot: process.env.SystemRoot,
+      MANTURHUB_CONFIG_DIR: join(root, 'isolated-cli-state') }, resourceRoot)
     const b = await hostFixture((_request, response) => {
       response.setHeader('Content-Type', 'application/json')
       response.end(JSON.stringify({ code: 0, data: { totalBalance: 9 } }))
@@ -100,4 +112,43 @@ describe.skipIf(process.env.DSH_TEST_EMBEDDED_CLI !== '1')('prepared embedded CL
     expect(b.backend.observed).toHaveLength(1)
     expect(signedOut.stdout.text + signedOut.stderr.text).not.toContain('never-use-this-key')
   })
+
+  it.skipIf(process.platform === 'win32')('checks the bundled production skill through the explicit embedded CLI binding', async () => {
+    const root = await realpath(await profile())
+    const bin = await prepareEmbeddedCli({ resourceRoot, userData: root, executable: process.execPath, platform: 'darwin' })
+    const environment = embeddedCliEnvironment(bin, { PATH: '/usr/bin:/bin', SystemRoot: process.env.SystemRoot,
+      MANTURHUB_CONFIG_DIR: join(root, 'isolated-cli-state') }, resourceRoot)
+    let upstreamRequests = 0
+    const account: ConstructorParameters<typeof NativeCommandBroker>[0] = {
+      async withCredential(signal, consume) {
+        await consume({ credential: 'isolated-skill-credential', origin: 'https://hub.mantur.ai', environment: 'production' }, signal, Date.now() + 60_000)
+      },
+    }
+    const broker = new NativeCommandBroker(account, { protocol: 'client-session', origin: 'https://hub.mantur.ai',
+      environment: 'production', environmentLabel: 'Isolated Skill test', requestTimeoutMs: 10_000, leaseMs: 60_000, now: Date.now },
+    async () => { upstreamRequests += 1; throw new Error('This check must not contact a live server') })
+    onTestFinished(() => broker.close())
+    const skillsRoot = fileURLToPath(new URL('../.generated/mantur-skills/', import.meta.url))
+    const manifest = JSON.parse(await readFile(join(skillsRoot, 'manifest.json'), 'utf8')) as {
+      skills: Array<{ name: string; digest: string }>
+    }
+    const skill = manifest.skills.find(item => item.name === 'mantur-drama-visual-studio')!
+    const entry = join(skillsRoot, `${skill.name}-${skill.digest}`, 'scripts/platform.mjs')
+    const execute = promisify(execFile)
+    await broker.run(new AbortController().signal, async (descriptor, lifetime) => {
+      await withNativeBrokerDescriptor(root, descriptor, lifetime, async (managed) => {
+        const result = await execute(process.execPath, [entry, '--source', 'unknown', 'check'], {
+          env: { ...environment, ...managed }, timeout: 15_000, signal: lifetime, encoding: 'utf8',
+        })
+        const report = JSON.parse(result.stdout) as { status: string; cliVersion: string; cliPath: string }
+        expect(report).toMatchObject({ status: 'READY', cliVersion: '1.2.10' })
+        expect(report.cliPath).toBe(join(resourceRoot, 'node_modules/@manturhub/cli/bin/cli.js'))
+      })
+    })
+    await expect(execute(process.execPath, [entry, '--source', 'unknown', 'check'], {
+      env: { ...environment, MANTURHUB_AGENT_AUTH: '' }, timeout: 15_000,
+    })).rejects.toThrow('DESKTOP_LOGIN_REQUIRED')
+    expect(upstreamRequests).toBe(0)
+  })
+
 })

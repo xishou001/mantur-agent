@@ -180,9 +180,10 @@ async function launch(): Promise<void> {
   const window = createWindow()
   await prepareDesktopPaths(paths)
   if (process.platform !== 'darwin' && process.platform !== 'win32') throw new Error('Native account requires macOS or Windows')
+  const cliResourceRoot = app.isPackaged ? join(process.resourcesPath, 'mantur-cli')
+    : fileURLToPath(new URL('../.generated/mantur-cli', import.meta.url))
   const cliBin = await prepareEmbeddedCli({
-    resourceRoot: app.isPackaged ? join(process.resourcesPath, 'mantur-cli')
-      : fileURLToPath(new URL('../.generated/mantur-cli', import.meta.url)),
+    resourceRoot: cliResourceRoot,
     userData: paths.userData, executable: process.execPath, platform: process.platform,
   })
   while (!quitting) {
@@ -191,7 +192,7 @@ async function launch(): Promise<void> {
       electronExecutable: process.execPath,
       cwd: paths.launchRoot,
       environment: {
-        ...embeddedCliEnvironment(cliBin, process.env),
+        ...embeddedCliEnvironment(cliBin, process.env, cliResourceRoot),
         DSH_HOME: paths.dshHome,
         DSH_BUNDLED_SKILL_DIR: app.isPackaged
           ? join(process.resourcesPath, 'mantur-skills')

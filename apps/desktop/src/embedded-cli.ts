@@ -1,6 +1,7 @@
 /** Profile-local CLI launchers use the application's Node runtime and Main-managed identity. */
 import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import { delimiter, isAbsolute, join } from 'node:path'
+import { homedir } from 'node:os'
 import { z } from 'zod'
 
 /** Exact app resources and profile location selected by Electron Main. */
@@ -52,13 +53,18 @@ export async function prepareEmbeddedCli(options: EmbeddedCliOptions): Promise<s
  * Put the embedded launcher ahead of ambient CLI installations without creating a global command.
  * @param bin - profile-local directory returned by prepareEmbeddedCli.
  * @param ambient - Main's environment before its supervised child is launched.
- * @returns copied environment with one PATH key and desktop-managed identity.
+ * @param resourceRoot - verified application-owned CLI resources used by Skill adapters.
+ * @returns copied environment with explicit CLI and existing configuration paths and desktop-managed identity.
  */
-export function embeddedCliEnvironment(bin: string, ambient: NodeJS.ProcessEnv): NodeJS.ProcessEnv {
+export function embeddedCliEnvironment(bin: string, ambient: NodeJS.ProcessEnv, resourceRoot: string): NodeJS.ProcessEnv {
   const entries = Object.entries(ambient)
   const path = entries.find(([key]) => key.toUpperCase() === 'PATH')?.[1]
-  const environment = Object.fromEntries(entries.filter(([key]) => key.toUpperCase() !== 'PATH'))
+  const owned = new Set(['PATH', 'MANTURHUB_IDENTITY_MODE', 'MANTURHUB_CLI_ENTRY', 'MANTURHUB_CONFIG_DIR'])
+  const environment = Object.fromEntries(entries.filter(([key]) => !owned.has(key.toUpperCase())))
   environment.PATH = bin + (path === undefined ? '' : delimiter + path)
   environment.MANTURHUB_IDENTITY_MODE = 'desktop-managed'
+  environment.MANTURHUB_CLI_ENTRY = join(resourceRoot, 'node_modules/@manturhub/cli/bin/cli.js')
+  environment.MANTURHUB_CONFIG_DIR = entries.find(([key]) => key.toUpperCase() === 'MANTURHUB_CONFIG_DIR')?.[1]
+    ?? join(homedir(), '.manturhub')
   return environment
 }
