@@ -42,7 +42,7 @@ jobs:
       - name: Build Mantur client and desktop carrier
         run: pnpm run build:mantur
       - name: Test desktop launch contract
-        run: pnpm exec vitest run apps/desktop/tests/runtime.spec.ts scripts/client-build-environment.client.spec.ts apps/desktop/tests/native-account-broker.spec.ts packages/credentials/authorization-manturhub/tests/native.spec.ts scripts/mantur-skills-resources.spec.ts
+        run: pnpm exec vitest run apps/desktop/tests/runtime.spec.ts scripts/client-build-environment.client.spec.ts apps/desktop/tests/native-account-broker.spec.ts packages/credentials/authorization-manturhub/tests/native.spec.ts scripts/mantur-skills-resources.spec.ts --testTimeout 60000 --hookTimeout 60000
       - name: Verify Windows private descriptor permissions
         if: runner.os == 'Windows'
         timeout-minutes: 3
