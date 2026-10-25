@@ -19,8 +19,8 @@ function ManturLogo({ size, className }: { size: number; className?: string | un
  */
 export function ManturSidebarMark({ size, placement }: SidebarBrandMarkOwnerProps) {
   return placement === 'expanded'
-    ? <img src="./aiying-wordmark-transparent.png" width={Math.round(size * 13 / 3)} height={size}
-      style={{ objectFit: 'cover', flexShrink: 0 }} alt="Aiying Works" />
+    ? <img src="./aiying-wordmark.svg" width={Math.round(size * 13 / 3)} height={size}
+      style={{ objectFit: 'contain', flexShrink: 0 }} alt="Aiying Works" />
     : <ManturLogo size={size} />
 }
 
@@ -39,8 +39,8 @@ export function ManturSidebarName({ t }: ManturNameProps) {
  * @returns the approved Mantur logo.
  */
 export function ManturHeroBrand({ size, className }: HeroBrandMarkOwnerProps) {
-  return <img src="./aiying-wordmark-transparent.png" width={Math.round(size * 13 / 3)} height={size}
-    className={className} style={{ maxWidth: '100%', objectFit: 'cover' }} alt="Aiying Works" />
+  return <img src="./aiying-wordmark.svg" width={Math.round(size * 13 / 3)} height={size}
+    className={className} style={{ maxWidth: '100%', objectFit: 'contain' }} alt="Aiying Works" />
 }
 
 /**

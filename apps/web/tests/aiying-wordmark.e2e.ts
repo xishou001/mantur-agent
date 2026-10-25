@@ -32,7 +32,7 @@ it('keeps the transparent English wordmark beside the complete Chinese sidebar n
     const brand = page.locator('[class*="brandIdentity"]').first()
     const logo = brand.locator('img')
     await logo.waitFor({ state: 'visible' })
-    expect(await logo.getAttribute('src')).toContain('aiying-wordmark-transparent.png')
+    expect(await logo.getAttribute('src')).toContain('aiying-wordmark.svg')
     expect(await brand.getByText('爱映工厂', { exact: true }).count()).toBe(1)
     expect(await brand.locator('[class*="brandName"]').evaluate(element => element.scrollWidth <= element.clientWidth)).toBe(true)
     expect(await logo.evaluate(async (element) => {
@@ -44,6 +44,31 @@ it('keeps the transparent English wordmark beside the complete Chinese sidebar n
       context.drawImage(image, 0, 0)
       return context.getImageData(0, 0, 1, 1).data[3]
     })).toBe(0)
+    const renderedEdges = await logo.evaluate(async (element) => {
+      const image = element as HTMLImageElement
+      await image.decode()
+      return [1, 1.25, 1.5, 2].map((scale) => {
+        const canvas = document.createElement('canvas')
+        canvas.width = Math.ceil(image.clientWidth * scale)
+        canvas.height = Math.ceil(image.clientHeight * scale)
+        const context = canvas.getContext('2d')!
+        const height = canvas.width * image.naturalHeight / image.naturalWidth
+        context.drawImage(image, 0, (canvas.height - height) / 2, canvas.width, height)
+        const pixels = context.getImageData(0, 0, canvas.width, canvas.height).data
+        let partialAlpha = 0
+        let whitePixels = 0
+        for (let index = 0; index < pixels.length; index += 4) {
+          const alpha = pixels[index + 3]!
+          if (alpha > 0 && alpha < 255) partialAlpha++
+          if (alpha > 0 && pixels[index]! > 240 && pixels[index + 1]! > 240 && pixels[index + 2]! > 240) whitePixels++
+        }
+        return { partialAlpha, whitePixels }
+      })
+    })
+    for (const edges of renderedEdges) {
+      expect(edges.partialAlpha).toBeGreaterThan(0)
+      expect(edges.whitePixels).toBe(0)
+    }
   } finally {
     const cleanup = await Promise.allSettled([
       browser?.close(), scaffold?.close(),

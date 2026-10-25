@@ -7,5 +7,7 @@
   "prompt": "Preserve the navy A, teal node motif and pale gradient; use a macOS rounded-square tile inset on a square canvas with alpha-transparent outer corners, no border, bevel or square frame.",
   "packaging": "Rounded RGBA 1254px raster resized to 1024px; identical Web icon copy. Transparent outer corners checked before packaging.",
   "transparentWordmark": "apps/web/public/aiying-wordmark-transparent.png",
-  "transparentWordmarkPrompt": "Remove only the white background from the supplied Aiying Works logo; preserve all letters, typography, navy and teal artwork, with genuinely transparent background and letter counters."
+  "transparentWordmarkPrompt": "Remove only the white background from the supplied Aiying Works logo; preserve all letters, typography, navy and teal artwork, with genuinely transparent background and letter counters.",
+  "vectorWordmark": "apps/web/public/aiying-wordmark.svg",
+  "vectorWordmarkConstruction": "Outlined Montserrat ExtraBold (SIL OFL 1.1), navy and teal fills, transparent hub counter, no embedded raster or runtime font dependency. Reconstructed to match the supplied Aiying Works wordmark."
 }
