@@ -1,6 +1,9 @@
 name: Desktop package
 'on':
   workflow_dispatch: null
+  push:
+    branches:
+      - build/aiying-windows
 permissions:
   contents: read
 concurrency:
