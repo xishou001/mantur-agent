@@ -204,7 +204,7 @@ describe.skipIf(MODE === 'record')('web snapshot: Mantur product identity', () =
     expect(await page.getByText('添加一个 API Key 开始使用', { exact: true }).count()).toBe(0)
     expect(await page.getByText(/DeepSeek Harness/).count()).toBe(0)
     expect(await page.locator('[class*="fishHitbox"] svg').count()).toBe(0)
-    expect(await page.locator('img[src$="aiying-icon.png"]').count()).toBe(2)
+    expect(await page.locator('img[src$="aiying-wordmark-transparent.png"]').count()).toBe(2)
     expect(await page.getByRole('button', { name: '标准模式' }).count()).toBe(0)
     expect(await page.getByRole('button', { name: /计划模式/ }).count()).toBe(0)
     await connectManturWorkspace(page, scaffold.workspaceCwd, 'zh')

@@ -41,6 +41,7 @@
     "apps/web/tests/settings-chrome.e2e.ts",
     "apps/web/tests/models-settings.e2e.ts",
     "apps/web/tests/mantur-brand.snapshot.ts",
+    "apps/web/tests/aiying-wordmark.e2e.ts",
     "apps/web/tests/mantur-guide.expected.e2e.ts",
     "apps/web/tests/mantur-native-account.expected.e2e.ts",
     "apps/web/tests/mantur-automatic-project.expected.e2e.ts",

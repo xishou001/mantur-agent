@@ -52,3 +52,5 @@ The expanded row, collapsed rail, and hero render the same image URL. The sideba
 </details>
 
 **Runtime invariant:** No companion is published. One browser effect installs and removes all five slot occupants together.
+
+The expanded sidebar shows the transparent Aiying Works wordmark beside the localized 爱映工厂 label. The collapsed rail retains the rounded square application icon. The Hero uses the same transparent wordmark. Image fitting removes only transparent vertical margins; it does not stretch or retype the lettering.

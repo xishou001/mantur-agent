@@ -2,5 +2,5 @@
 # side as of the last confirmed-consistent state. Both languages carry equal authority;
 # after editing either side, bring the other along and re-record with:
 #   pnpm run verify-translation-pairing --write .agents/notes/implemented/feature/2026-09-02-mantur-brand-identity.md
-2026-09-02-mantur-brand-identity.md: b71355bfaff68b6e4761c8ab9b5a687034249fb3
-2026-09-02-mantur-brand-identity.zh.md: 6509d72f7b13703eec42915cef556b3b22faf9d1
+2026-09-02-mantur-brand-identity.md: b9ca1bf92dbd3fc2bd17323c6a5e8fc9829213d1
+2026-09-02-mantur-brand-identity.zh.md: 53f023fd7dd9a21b6afbfecf6cfd4e0a83806972
