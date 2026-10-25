@@ -30,7 +30,7 @@ function clientDocumentMetadata(): Plugin {
     },
     async closeBundle() {
       if (!isMantur) {
-        await Promise.all(['aiying-icon.png', 'aiying-wordmark.png'].map(name => rm(src(`./dist/${name}`), { force: true })))
+        await Promise.all(['aiying-icon.png', 'aiying-wordmark.png', 'aiying-wordmark-transparent.png'].map(name => rm(src(`./dist/${name}`), { force: true })))
         return
       }
       await Promise.all([

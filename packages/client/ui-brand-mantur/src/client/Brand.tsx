@@ -13,12 +13,15 @@ function ManturLogo({ size, className }: { size: number; className?: string | un
 }
 
 /**
- * Render the Mantur mark in the expanded identity row and collapsed rail.
+ * Render the transparent wordmark when expanded and the square icon in the rail.
  * @param props - Sidebar placement selected by the shell.
- * @returns the approved Mantur logo.
+ * @returns the placement-specific brand artwork.
  */
-export function ManturSidebarMark({ size }: SidebarBrandMarkOwnerProps) {
-  return <ManturLogo size={size} />
+export function ManturSidebarMark({ size, placement }: SidebarBrandMarkOwnerProps) {
+  return placement === 'expanded'
+    ? <img src="./aiying-wordmark-transparent.png" width={Math.round(size * 13 / 3)} height={size}
+      style={{ objectFit: 'cover', flexShrink: 0 }} alt="Aiying Works" />
+    : <ManturLogo size={size} />
 }
 
 /**
@@ -36,8 +39,8 @@ export function ManturSidebarName({ t }: ManturNameProps) {
  * @returns the approved Mantur logo.
  */
 export function ManturHeroBrand({ size, className }: HeroBrandMarkOwnerProps) {
-  return <img src="./aiying-wordmark.png" width={Math.round(size * 1286 / 320)} height={size}
-    className={className} style={{ maxWidth: '100%', objectFit: 'contain' }} alt="Aiying Works" />
+  return <img src="./aiying-wordmark-transparent.png" width={Math.round(size * 13 / 3)} height={size}
+    className={className} style={{ maxWidth: '100%', objectFit: 'cover' }} alt="Aiying Works" />
 }
 
 /**
