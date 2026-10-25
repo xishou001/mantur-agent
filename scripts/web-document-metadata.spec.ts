@@ -27,7 +27,7 @@ it.each(['official', 'mantur'])('keeps the optional mascot while applying %s doc
   expect(metadata).toBeDefined()
   const html = metadata.transformIndexHtml('<title>DSH Local Build</title><link rel="icon" type="image/svg+xml" href="./favicon.svg" />')
   await metadata.closeBundle()
-  expect(vi.mocked(rm).mock.calls.map(([path]) => basename(String(path)))).toEqual(profile === 'mantur' ? ['favicon.svg'] : ['aiying-icon.png', 'aiying-wordmark.png', 'aiying-wordmark-transparent.png'])
+  expect(vi.mocked(rm).mock.calls.map(([path]) => basename(String(path)))).toEqual(profile === 'mantur' ? ['favicon.svg'] : ['aiying-icon.png', 'aiying-wordmark.png', 'aiying-wordmark-transparent.png', 'aiying-wordmark.svg', 'aiying-wordmark-OFL.txt'])
   expect(html).toContain(profile === 'mantur' ? '<title>爱映工厂</title>' : '<title>DeepSeek Harness</title>')
   expect(html).toContain(profile === 'mantur' ? './aiying-icon.png' : './favicon.svg')
   if (profile === 'official') {

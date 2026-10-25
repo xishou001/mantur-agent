@@ -58,7 +58,7 @@ describe('Mantur browser-brand plugin', () => {
 
     const hero = render(<ManturHeroBrand size={34} className="hero-mark" />)
     const heroLogo = hero.container.querySelector('img')
-    expect(heroLogo?.getAttribute('src')).toBe('./aiying-wordmark-transparent.png')
+    expect(heroLogo?.getAttribute('src')).toBe('./aiying-wordmark.svg')
     expect(heroLogo?.getAttribute('class')).toBe('hero-mark')
     expect(heroLogo?.getAttribute('width')).toBe('147')
     hero.unmount()
@@ -70,7 +70,7 @@ describe('Mantur browser-brand plugin', () => {
     headline.unmount()
 
     const expanded = render(<ManturSidebarMark size={24} placement="expanded" />)
-    expect(expanded.container.querySelector('img')?.getAttribute('src')).toBe('./aiying-wordmark-transparent.png')
+    expect(expanded.container.querySelector('img')?.getAttribute('src')).toBe('./aiying-wordmark.svg')
     expect(expanded.container.querySelector('img')?.getAttribute('width')).toBe('104')
     expanded.rerender(<ManturSidebarMark size={24} placement="rail" />)
     expect(expanded.container.querySelector('img')?.getAttribute('width')).toBe('24')
