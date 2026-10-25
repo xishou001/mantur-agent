@@ -51,26 +51,26 @@ describe('Mantur browser-brand plugin', () => {
   })
 
   it('renders the approved logo with the localized product copy', () => {
-    const t = (() => 'CUC漫创') as never
+    const t = (() => '爱映工厂') as never
     const sidebarName = render(<ManturSidebarName t={t} />)
-    expect(sidebarName.getByText('CUC漫创')).toBeTruthy()
+    expect(sidebarName.getByText('爱映工厂')).toBeTruthy()
     sidebarName.unmount()
 
     const hero = render(<ManturHeroBrand size={34} className="hero-mark" />)
     const heroLogo = hero.container.querySelector('img')
-    expect(heroLogo?.getAttribute('src')).toBe('./mantur-logo.png')
+    expect(heroLogo?.getAttribute('src')).toBe('./aiying-wordmark.png')
     expect(heroLogo?.getAttribute('class')).toBe('hero-mark')
-    expect(heroLogo?.getAttribute('width')).toBe('34')
+    expect(heroLogo?.getAttribute('width')).toBe('137')
     hero.unmount()
 
     const headline = render(<ManturHeroHeadline t={key => key === 'headline'
-      ? '故事起于一念，余下交给CUC漫创'
-      : 'CUC漫创'} />)
-    expect(headline.getByText('故事起于一念，余下交给CUC漫创')).toBeTruthy()
+      ? '故事起于一念，余下交给爱映工厂'
+      : '爱映工厂'} />)
+    expect(headline.getByText('故事起于一念，余下交给爱映工厂')).toBeTruthy()
     headline.unmount()
 
     const expanded = render(<ManturSidebarMark size={24} placement="expanded" />)
-    expect(expanded.container.querySelector('img')?.getAttribute('src')).toBe('./mantur-logo.png')
+    expect(expanded.container.querySelector('img')?.getAttribute('src')).toBe('./aiying-icon.png')
     expanded.rerender(<ManturSidebarMark size={24} placement="rail" />)
     expect(expanded.container.querySelector('img')?.getAttribute('width')).toBe('24')
     expanded.unmount()

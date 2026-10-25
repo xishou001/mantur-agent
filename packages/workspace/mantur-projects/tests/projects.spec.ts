@@ -85,7 +85,7 @@ describe('first-send project preparation', () => {
 
   it('reads and changes the root without creating directories or Workspaces', async () => {
     const parent = await temporaryRoot()
-    const root = join(parent, 'Documents', 'CUC漫创')
+    const root = join(parent, 'Documents', '爱映工厂')
     const { ctx, projects } = await harness(root)
     expect(projects.settings()).toEqual({ source: 'desktop', rootPath: root })
     expect(ctx.workspaceRegistry.list()).toEqual([])

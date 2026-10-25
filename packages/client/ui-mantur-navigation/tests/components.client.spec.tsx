@@ -162,7 +162,7 @@ describe('Mantur marketplace navigation', () => {
       />,
     )
     expect(screen.getByRole('heading', { name: '配方广场' })).toBeTruthy()
-    expect(screen.getByText('从经过验证的优秀案例出发，替换成你的内容，让CUC漫创复刻同款效果。')).toBeTruthy()
+    expect(screen.getByText('从经过验证的优秀案例出发，替换成你的内容，让爱映工厂复刻同款效果。')).toBeTruthy()
     expect(screen.getByText('还没有找到匹配的配方，换个关键词试试。')).toBeTruthy()
   })
 

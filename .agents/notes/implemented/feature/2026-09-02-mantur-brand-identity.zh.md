@@ -12,9 +12,9 @@
 
 随附的 `mantur` profile 依次叠加 `dsh-base`、`dsh-web-app` 与 `dsh-mantur-app`。桌面载体启动该 profile；普通 `web` profile 保持不变。
 
-`dsh-client-ui-brand-mantur` 占用通用侧边栏与空会话 Hero slot。它显示已确认的对称蓝色无限环 Logo 和文字名称“漫途Agent”，把 Hero 标题替换为“故事起于一念，余下交给漫途”或其英文等价文案，移除预览版徽标，并隐藏官方鱼形标记。收起轨道先显示漫途 Logo，悬停时再显示既有面板导航图形。通用 Conversation shell 为标题与徽标声明 slot，并以既有文案作为 fallback；侧边栏 mark owner 则收到展开态或轨道态位置。
+`dsh-client-ui-brand-mantur` 占用通用侧边栏与空会话 Hero slot。它显示已确认的爱映工厂方形图标和文字名称“爱映工厂”，把 Hero 标题替换为“故事起于一念，余下交给爱映工厂”或其英文等价文案，移除预览版徽标，并隐藏官方鱼形标记。收起轨道先显示爱映工厂图标，悬停时再显示既有面板导航图形。通用 Conversation shell 为标题与徽标声明 slot，并以既有文案作为 fallback；侧边栏 mark owner 则收到展开态或轨道态位置。
 
-漫途构建会发出产品自有的浏览器安装元数据：文档标题、manifest 名称与 manifest 短名称均为“漫途Agent”；favicon 与 manifest 图标使用已确认的 1024 px 透明 PNG。官方构建和本地开发构建保留既有元数据，并且不把未使用的漫途文件放入输出。
+漫途构建会发出产品自有的浏览器安装元数据：文档标题、manifest 名称与 manifest 短名称均为“漫途Agent”；favicon 与 manifest 图标使用已确认的 1024 px 方形 PNG。官方构建和本地开发构建保留既有元数据，并且不把未使用的漫途文件放入输出。
 
 漫途层只禁用官方品牌、预览版公告、Agent Preset 客户端表面和 Plan 客户端表面。它保留这些宿主包与 Agent 组装能力、Models 设置、DeepSeek 凭据引导以及模型和权限控件。该层还省略通用 Harness 与 Web 表面提示词段。其宿主身份项在协作式提示词转换后替换有效的非 complete Preset persona，因此默认 Standard Preset 不会把模型改回通用编码 Agent。最终 persona 明确漫途归属、本地执行，以及从故事到制作交付的漫剧工作。
 
@@ -38,7 +38,7 @@ Web 公开目录与桌面资源目录保存已确认 PNG 的字节完全相同�
 
 **只修改全局部署 persona。** 拒绝，因为 Agent 作用域的 Preset persona 会在组装前遮蔽它。
 
-**派生字母组合或临时标记。** 拒绝，因为已确认的对称蓝色无限环是 Web 和原生包唯一的产品标记。
+**所有尺寸均使用横版字标。** 拒绝，因为桌面快捷方式和收起后的侧边栏需要清晰可辨的方形图标。
 
 ## 后果
 
@@ -47,3 +47,7 @@ Web 公开目录与桌面资源目录保存已确认 PNG 的字节完全相同�
 - 漫途部署 persona 优先于非 complete Preset persona，Preset 工具与 skill 保持不变。
 - 其他 Web 部署保留现有品牌、首页标题、预览版徽标与控件。
 - 替换已确认的位图素材时必须同步 Web 与桌面资源副本，桌面运行时与 profile 结构保持不变。
+
+## 爱映工厂品牌
+
+应用显示名称为爱映工厂，首页使用用户提供的 Aiying Works 横版字标。深蓝 A 与青色节点组成的配套图标使用浅色渐变底，用于原生应用、登录页、侧边栏、网页图标和安装元数据。已提交的产品名称和 Aiying-Works 文件名驱动两个原生平台与 DMG 生成。新建项目默认位于 Documents/爱映工厂；已有项目路径、用户数据根目录、应用标识与业务端点保持稳定。助手身份为爱映工厂创作助手，不声称上游品牌归属。[账号决策](../architecture/2026-09-08-browser-account-authorization.zh.md) 负责钥匙串身份和重新登录要求。品牌组合、原生启动、旧会话隔离和构建检查验证修改，不访问真实账号。

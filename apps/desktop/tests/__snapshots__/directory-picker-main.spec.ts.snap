@@ -8,7 +8,7 @@ exports[`records account recovery dialog copy for en 1`] = `
   "failure": "Account storage could not be updated. Sign-in has not started.",
   "failureDetail": "Original account data remains in its original location or a private local backup. Projects, drafts and model keys were not changed. Quit and contact support; do not delete the account directory.",
   "message": "This version uses browser sign-in and needs new authorization.",
-  "title": "Sign in to CUC漫创 again",
+  "title": "Sign in to 爱映工厂 again",
 }
 `;
 

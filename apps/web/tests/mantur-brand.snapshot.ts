@@ -195,16 +195,16 @@ describe.skipIf(MODE === 'record')('web snapshot: Mantur product identity', () =
 
   it('shows the Mantur brand without the official mark, preview badge, preset, or plan control', async () => {
     onTestFailed(() => saveFailureShot(page, 'web-e2e-mantur-brand'))
-    await expect.poll(() => page.getByText('CUC漫创', { exact: true }).count(), { timeout: 10_000 })
+    await expect.poll(() => page.getByText('爱映工厂', { exact: true }).count(), { timeout: 10_000 })
       .toBe(1)
-    await page.getByText('故事起于一念，余下交给CUC漫创', { exact: true }).waitFor({ timeout: 10_000 })
+    await page.getByText('故事起于一念，余下交给爱映工厂', { exact: true }).waitFor({ timeout: 10_000 })
     expect(await page.getByText('探索未至之境', { exact: true }).count()).toBe(0)
     expect(await page.getByText('预览版', { exact: true }).count()).toBe(0)
     expect(await page.getByText('内测声明', { exact: true }).count()).toBe(0)
     expect(await page.getByText('添加一个 API Key 开始使用', { exact: true }).count()).toBe(0)
     expect(await page.getByText(/DeepSeek Harness/).count()).toBe(0)
     expect(await page.locator('[class*="fishHitbox"] svg').count()).toBe(0)
-    expect(await page.locator('img[src$="mantur-logo.png"]').count()).toBe(2)
+    expect(await page.locator('img[src$="aiying-icon.png"]').count()).toBe(2)
     expect(await page.getByRole('button', { name: '标准模式' }).count()).toBe(0)
     expect(await page.getByRole('button', { name: /计划模式/ }).count()).toBe(0)
     await connectManturWorkspace(page, scaffold.workspaceCwd, 'zh')
@@ -239,7 +239,7 @@ describe.skipIf(MODE === 'record')('web snapshot: Mantur product identity', () =
       await firstRunPage.goto(firstRun.authenticatedUrl, { waitUntil: 'load' })
       await firstRunPage.waitForSelector('[class*="frame"]', { timeout: 30_000 })
       if (CLIENT_PROFILE === 'mantur') {
-        await firstRunPage.getByText('故事起于一念，余下交给CUC漫创', { exact: true }).waitFor()
+        await firstRunPage.getByText('故事起于一念，余下交给爱映工厂', { exact: true }).waitFor()
         expect(await firstRunPage.getByRole('heading', { name: '添加一个 API Key 开始使用' }).count()).toBe(0)
       } else {
         await firstRunPage.getByRole('heading', { name: '添加一个 API Key 开始使用' }).waitFor()
@@ -345,7 +345,7 @@ describe.skipIf(MODE === 'record')('web snapshot: Mantur product identity', () =
 
     await page.getByRole('button', { name: '配方广场' }).click()
     await page.getByRole('heading', { name: '配方广场' }).waitFor({ timeout: 10_000 })
-    await page.getByText('从经过验证的优秀案例出发，替换成你的内容，让CUC漫创复刻同款效果。')
+    await page.getByText('从经过验证的优秀案例出发，替换成你的内容，让爱映工厂复刻同款效果。')
       .waitFor({ timeout: 10_000 })
     await page.getByText('宿命感双人电影海报', { exact: true }).waitFor({ timeout: 10_000 })
     expect(await page.getByRole('button', { name: '配方广场' }).getAttribute('aria-current')).toBe('page')
@@ -369,7 +369,7 @@ describe.skipIf(MODE === 'record')('web snapshot: Mantur product identity', () =
 
     await page.getByRole('button', { name: '返回配方广场' }).click()
     await page.getByRole('button', { name: '返回对话' }).click()
-    await page.getByText('故事起于一念，余下交给CUC漫创', { exact: true }).waitFor({ timeout: 10_000 })
+    await page.getByText('故事起于一念，余下交给爱映工厂', { exact: true }).waitFor({ timeout: 10_000 })
     expect(await page.getByRole('heading', { name: '配方广场' }).count()).toBe(0)
     expect(tripwire.pageErrors).toEqual([])
   }, 60_000)
@@ -457,9 +457,9 @@ describe.skipIf(MODE === 'record')('web snapshot: Mantur product identity', () =
     try {
       await englishPage.goto(englishScaffold.authenticatedUrl, { waitUntil: 'load' })
       await englishPage.waitForSelector('[class*="frame"]', { timeout: 30_000 })
-      await englishPage.getByText('CUC漫创', { exact: true }).waitFor({ timeout: 10_000 })
-      expect(await englishPage.getByRole('heading', { name: 'Sign in to CUC漫创' }).count()).toBe(0)
-      await englishPage.getByText('Every story starts with an idea. CUC漫创 handles the rest.', { exact: true })
+      await englishPage.getByText('爱映工厂', { exact: true }).waitFor({ timeout: 10_000 })
+      expect(await englishPage.getByRole('heading', { name: 'Sign in to 爱映工厂' }).count()).toBe(0)
+      await englishPage.getByText('Every story starts with an idea. 爱映工厂 handles the rest.', { exact: true })
         .waitFor({ timeout: 10_000 })
       expect(await englishPage.getByText('Preview', { exact: true }).count()).toBe(0)
       expect(await englishPage.getByText('Internal Testing Notice', { exact: true }).count()).toBe(0)

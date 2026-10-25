@@ -1,0 +1,9 @@
+{
+  "brand": "爱映工厂",
+  "wordmark": "apps/web/public/aiying-wordmark.png",
+  "wordmarkSource": "User-supplied image, 2026-10-25",
+  "icon": "aiying-app-icon.png",
+  "tool": "Built-in image_gen",
+  "prompt": "Square desktop app icon for 爱映工厂 Aiying Works; a bold navy A with the reference’s teal connected ring-and-nodes motif near its upper right; generous padding; subtle near-white ice-blue to light-teal gradient; no border, shadow, bevel, full wordmark or other text.",
+  "packaging": "Generated 1254px raster resized to 1024px; identical copy at apps/web/public/aiying-icon.png"
+}

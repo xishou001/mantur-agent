@@ -5,9 +5,9 @@ import type { PropsLocale } from '@deepseek-ai/dsh-client-ui-slots'
 
 /** Props shared by the two product-name occupants. */
 type ManturNameProps = PropsLocale<'brand.mantur'>
-const MANTUR_LOGO_SRC = './mantur-logo.png'
+const MANTUR_LOGO_SRC = './aiying-icon.png'
 
-/** Render the approved Mantur infinity-loop artwork at a host-owned size. */
+/** Render the approved Aiying square artwork at a host-owned size. */
 function ManturLogo({ size, className }: { size: number; className?: string | undefined }) {
   return <img src={MANTUR_LOGO_SRC} width={size} height={size} className={className} alt="" />
 }
@@ -36,7 +36,8 @@ export function ManturSidebarName({ t }: ManturNameProps) {
  * @returns the approved Mantur logo.
  */
 export function ManturHeroBrand({ size, className }: HeroBrandMarkOwnerProps) {
-  return <ManturLogo size={size} className={className} />
+  return <img src="./aiying-wordmark.png" width={Math.round(size * 1286 / 320)} height={size}
+    className={className} style={{ maxWidth: '100%', objectFit: 'contain' }} alt="Aiying Works" />
 }
 
 /**

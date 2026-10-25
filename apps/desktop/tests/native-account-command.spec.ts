@@ -24,7 +24,7 @@ describe.skipIf(process.platform === 'win32')('native identity through real comm
       env: { MANTURHUB_AGENT_AUTH: '/isolated/stale-descriptor.json', MANTURHUB_IDENTITY_MODE: 'standalone' } }).result
     expect(resultSchema.parse(reply).result).toMatchObject({ exitCode: 0, stdout: { text: 'desktop-managed:' } })
     expect(b.backend.observed).toEqual([])
-    expect(await readdir(b.root)).toEqual(['client-session'])
+    expect(await readdir(b.root)).toEqual(['aiying-client-session'])
   })
 
   it('releases the Main descriptor after the real Bash process and scope finish', async () => {
@@ -92,7 +92,7 @@ describe.skipIf(process.platform === 'win32' || cliPackage === undefined && cliT
     expect(result.stdout.text + result.stderr.text).not.toContain(b.backend.bearer())
     expect(result.stdout.text + result.stderr.text).not.toContain(b.backend.password)
     expect(b.backend.observed).toEqual([{ path: '/api/openapi/v1/credits/balance', authorization: undefined, apiKey: b.backend.bearer(), client: 'cli' }])
-    expect(await readdir(b.root)).toEqual(['client-session'])
+    expect(await readdir(b.root)).toEqual(['aiying-client-session'])
   })
 
   it.each(['logout', 'composition disposal'] as const)('joins %s through a streaming real CLI descendant', async (operation) => {

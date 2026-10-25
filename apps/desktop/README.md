@@ -10,7 +10,7 @@ Create-attempt retries accept the server's remaining lifetime from zero to 600 s
 
 Before exchanging a new Host launch token, Main removes only root-scoped `dsh-auth-` connection cookies for `127.0.0.1` from the desktop window's cookie store. Cookies are shared across ports; retaining cookies from random-port restarts can exceed HTTP request-header limits and block plugin loading with 431. This cleanup preserves account credentials, sessions, browser preferences and unrelated cookies. Removal must finish before navigation; failures stop startup.
 
-Electron keeps `漫途Agent` as its application storage name while windows, menus and the About panel display `ManTur Agent`. On macOS, `safeStorage` derives its Keychain service from the storage name; changing that name prevents existing encrypted account credentials from being read.
+Electron uses `爱映工厂` for its application and macOS Keychain service name. Account credentials are encrypted in `aiying-client-session`; legacy `client-session` files remain untouched and require a fresh sign-in. The `mantur-agent` user-data directory, project history and application identifier remain stable. New projects default to `Documents/爱映工厂`; existing project locations remain usable.
 
 On macOS, the native About panel reads its icon from the application bundle. The unpackaged development executable therefore retains Electron’s About icon; its Dock icon uses the product PNG.
 
@@ -118,7 +118,7 @@ The permanent application identifier is `ai.mantur.agent`. Before Electron becom
 
 If startup identifies only a stale `session_projcache` schema, the carrier closes the failed child process and its log before the localized native dialog can remove that disposable projection cache and retry after the user explicitly approves the action. It never deletes session logs, settings, credentials, profiles, or workspaces. Other startup failures offer the log and quit instead of guessing a repair.
 
-CUC漫创 builds disable application update checks, downloads, and installation from the upstream feed. Native update-check controls are hidden and the update bridge reports updates unavailable, so the sidebar does not offer an upstream installer. Login, skills, recipes, and other business-service connections keep their existing endpoints. Upgrade CUC漫创 by syncing reviewed upstream code, retaining CUC branding, and installing a newly built package manually. Existing downloaded upstream installers are not used.
+爱映工厂 builds disable application update checks, downloads, and installation from the upstream feed. Native update-check controls are hidden and the update bridge reports updates unavailable, so the sidebar does not offer an upstream installer. Login, skills, recipes, and other business-service connections keep their existing endpoints. Upgrade 爱映工厂 by syncing reviewed upstream code, retaining CUC branding, and installing a newly built package manually. Existing downloaded upstream installers are not used.
 
 The shared update controller remains available for release builds with a compatible publishing and signing channel. macOS release updates require a signed and notarized application plus generated ZIP metadata. Windows public updates require a code-signing identity and protected publication credentials. This CUC build does not enable that controller.
 

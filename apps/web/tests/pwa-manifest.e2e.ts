@@ -28,13 +28,13 @@ it('ships install metadata with the built web application', async () => {
   expect(manifest).toEqual(PROFILE === 'mantur'
     ? {
       id: '/',
-      name: 'CUC漫创',
-      short_name: 'CUC漫创',
+      name: '爱映工厂',
+      short_name: '爱映工厂',
       start_url: '/',
       scope: '/',
       display: 'fullscreen',
       icons: [{
-        src: './mantur-logo.png',
+        src: './aiying-icon.png',
         sizes: '1024x1024',
         type: 'image/png',
         purpose: 'any',
@@ -55,14 +55,14 @@ it('ships install metadata with the built web application', async () => {
       }],
     })
   expect(index).toContain(PROFILE === 'mantur'
-    ? '<link rel="icon" type="image/png" href="./mantur-logo.png" />'
+    ? '<link rel="icon" type="image/png" href="./aiying-icon.png" />'
     : '<link rel="icon" type="image/svg+xml" href="./favicon.svg" />')
 })
 
 it('ships the profile-owned favicon', async () => {
   if (PROFILE === 'mantur') {
     expect(existsSync(join(DIST_ROOT, 'favicon.svg'))).toBe(false)
-    const logo = await readFile(join(DIST_ROOT, 'mantur-logo.png'))
+    const logo = await readFile(join(DIST_ROOT, 'aiying-icon.png'))
     expect(logo.subarray(0, 8)).toEqual(Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]))
     return
   }

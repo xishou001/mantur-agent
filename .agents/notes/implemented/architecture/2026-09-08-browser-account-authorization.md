@@ -15,7 +15,7 @@ The [stable CLI identity decision](../bug-fix/2026-10-21-stable-desktop-cli-iden
 
 ## Decision
 
-The desktop retains `漫途Agent` as Electron's storage identity independently of visible branding. Electron derives the macOS Keychain service from `app.getName()`; changing this identity makes existing OS-encrypted grants unreadable. Main sets the storage name before opening account storage. No credential copying or alternate decryption path is needed.
+The desktop uses `爱映工厂` as its Electron application name and macOS Keychain identity. Encrypted client sessions use the `aiying-client-session` directory; legacy account files remain untouched and are not decrypted with the new key. Users sign in again after this brand transition. The application identifier and user-data root remain stable.
 
 [Main](../../../../apps/desktop/src/auth/controller.ts) implements browser-account-v2 with an external browser and an exact random IPv4 loopback callback. It checks state and issuer before exchanging a one-use code with PKCE. The complete create request and exchange identity are OS-encrypted before network transmission; the code is encrypted before exchange. The renderer receives public state and named actions, without URLs containing state, passwords or secrets. Confirmed exchange metadata precedes sign-in and window activation.
 

@@ -16,7 +16,7 @@ const updateItemIds = new Set([
 
 function menuFor(platform: NodeJS.Platform, state: DesktopUpdateState, overrides = {}) {
   return buildApplicationMenu({
-    appName: 'CUC漫创',
+    appName: '爱映工厂',
     version: '1.2.3',
     platform,
     updatesEnabled: true,

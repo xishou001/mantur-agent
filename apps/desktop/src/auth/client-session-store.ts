@@ -21,7 +21,7 @@ export class ClientSessionStore {
   private tail: Promise<unknown> = Promise.resolve()
   /** @param root - desktop profile. @param origin - selected deployment. @param cipher - operating-system encryption. */
   constructor(root: string, private readonly origin: string, private readonly cipher: NativeCipher) {
-    this.directory = join(root, 'client-session')
+    this.directory = join(root, 'aiying-client-session')
     this.file = join(this.directory, createHash('sha256').update(origin).digest('hex') + '.sealed')
   }
   /** @returns the profile's persistent onboarding choice. */

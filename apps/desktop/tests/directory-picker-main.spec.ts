@@ -209,10 +209,10 @@ describe('desktop directory picker wiring', () => {
 })
 
 describe('client-session startup', () => {
-  it('retains the Keychain identity while displaying the current brand', async () => {
+  it('uses the current brand for the Keychain and window identity', async () => {
     await startup()
-    expect(native.app.setName).toHaveBeenCalledExactlyOnceWith('漫途Agent')
-    expect(native.app.setAboutPanelOptions).toHaveBeenCalledWith(expect.objectContaining({ applicationName: 'CUC漫创' }))
+    expect(native.app.setName).toHaveBeenCalledExactlyOnceWith('爱映工厂')
+    expect(native.app.setAboutPanelOptions).toHaveBeenCalledWith(expect.objectContaining({ applicationName: '爱映工厂' }))
   })
 
   it('opens the Host without migrating or prompting to replace retired device-grant storage', async () => {

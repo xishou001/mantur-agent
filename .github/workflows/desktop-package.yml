@@ -23,23 +23,23 @@ jobs:
             runner: macos-15
             script: desktop:dist:mac:arm64
             artifacts: |
-              apps/desktop/dist/Mantur-Agent-macOS-arm64.dmg
-              apps/desktop/dist/Mantur-Agent-macOS-arm64.zip
+              apps/desktop/dist/Aiying-Works-macOS-arm64.dmg
+              apps/desktop/dist/Aiying-Works-macOS-arm64.zip
               apps/desktop/dist/*.blockmap
               apps/desktop/dist/latest-mac.yml
           - target: macos-x64
             runner: macos-15-intel
             script: desktop:dist:mac:x64
             artifacts: |
-              apps/desktop/dist/Mantur-Agent-macOS-x64.dmg
-              apps/desktop/dist/Mantur-Agent-macOS-x64.zip
+              apps/desktop/dist/Aiying-Works-macOS-x64.dmg
+              apps/desktop/dist/Aiying-Works-macOS-x64.zip
               apps/desktop/dist/*.blockmap
               apps/desktop/dist/latest-mac.yml
           - target: windows-x64
             runner: windows-2025
             script: desktop:dist:win:x64
             artifacts: |
-              apps/desktop/dist/Mantur-Agent-Windows-x64.exe
+              apps/desktop/dist/Aiying-Works-Windows-x64.exe
               apps/desktop/dist/*.blockmap
               apps/desktop/dist/latest.yml
     env:

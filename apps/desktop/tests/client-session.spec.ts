@@ -1,5 +1,6 @@
 /** Isolated client-session gateway, encrypted storage and loopback lifecycle tests. */
-import { mkdtemp, readFile, readdir, rm } from 'node:fs/promises'
+import { mkdir, mkdtemp, readFile, readdir, rm, writeFile } from 'node:fs/promises'
+import { createHash } from 'node:crypto'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { afterEach, describe, expect, it } from 'vitest'
@@ -57,6 +58,24 @@ async function signedIn(f: Awaited<ReturnType<typeof fixture>>) {
   await expect.poll(() => f.controller.getSnapshot().authenticated).toBe(true)
 }
 
+it('leaves legacy encrypted sessions untouched and requests a fresh brand login without decrypting them', async () => {
+  const root = await mkdtemp(join(tmpdir(), 'aiying-brand-session-'))
+  disposers.push(() => rm(root, { recursive: true, force: true }))
+  const legacy = join(root, 'client-session')
+  await mkdir(legacy)
+  const file = join(legacy, createHash('sha256').update(origin).digest('hex') + '.sealed')
+  await writeFile(file, 'legacy encrypted session')
+  let decryptions = 0
+  const store = new ClientSessionStore(root, origin, { ...cipher,
+    async decryptStringAsync() { decryptions += 1; throw new Error('Legacy key must not be requested') },
+  })
+  expect(await store.read()).toBeUndefined()
+  expect(decryptions).toBe(0)
+  await store.skip()
+  expect(await store.readSkipped()).toBe(true)
+  expect(await readFile(file, 'utf8')).toBe('legacy encrypted session')
+})
+
 describe('Main client-session authorization', () => {
   it('refuses an authorization URL for another deployment before opening the browser', async () => {
     const f = await fixture(undefined, path => path.endsWith('/sessions') ? {
@@ -80,8 +99,8 @@ describe('Main client-session authorization', () => {
     expect(f.calls.filter(c => c.path.endsWith('/token'))).toHaveLength(1)
     expect(f.calls.filter(c => c.path === '/api/agent/v1/api-keys')).toHaveLength(1)
     expect(JSON.stringify(f.controller.getSnapshot())).not.toMatch(/access-secret|refresh-secret|key-secret/)
-    const files = await readdir(join(f.root, 'client-session'))
-    const text = (await readFile(join(f.root, 'client-session', files[0]!))).toString()
+    const files = await readdir(join(f.root, 'aiying-client-session'))
+    const text = (await readFile(join(f.root, 'aiying-client-session', files[0]!))).toString()
     expect(text).not.toContain('new-access-secret')
     await f.controller.signOut()
     expect(await f.store.read()).toBeUndefined()

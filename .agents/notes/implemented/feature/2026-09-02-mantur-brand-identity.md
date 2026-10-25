@@ -12,9 +12,9 @@ The desktop installer is a Mantur product for people producing comic dramas, but
 
 The shipped `mantur` profile stacks `dsh-base`, `dsh-web-app`, and `dsh-mantur-app`. The desktop carrier launches that profile; the ordinary `web` profile remains unchanged.
 
-`dsh-client-ui-brand-mantur` occupies generic sidebar and blank-session Hero slots. It renders the approved symmetric blue infinity-loop logo and the confirmed text name `漫途Agent`, replaces the Hero headline with `故事起于一念，余下交给漫途` or its English equivalent, removes the Preview badge, and suppresses the official fish mark. The collapsed rail displays the Mantur logo until hover reveals the existing panel-navigation glyph. The generic conversation shell declares headline and badge slots with its existing copy as fallbacks, and the sidebar mark owner receives its expanded or rail placement.
+`dsh-client-ui-brand-mantur` occupies generic sidebar and blank-session Hero slots. It renders the approved Aiying square icon and the confirmed text name `爱映工厂`, replaces the Hero headline with `故事起于一念，余下交给爱映工厂` or its English equivalent, removes the Preview badge, and suppresses the official fish mark. The collapsed rail displays the Aiying icon until hover reveals the existing panel-navigation glyph. The generic conversation shell declares headline and badge slots with its existing copy as fallbacks, and the sidebar mark owner receives its expanded or rail placement.
 
-The Mantur build emits product-owned browser install metadata: the document title, manifest name, and manifest short name are `漫途Agent`; its favicon and manifest icon use the approved 1024 px transparent PNG. Official and local-development builds retain their existing metadata and omit the unused Mantur file from their output.
+The Mantur build emits product-owned browser install metadata: the document title, manifest name, and manifest short name are `爱映工厂`; its favicon and manifest icon use the approved 1024 px square PNG. Official and local-development builds retain their existing metadata and omit the unused Mantur file from their output.
 
 The Mantur layer disables only the official brand, preview notice, Agent Preset client surface, and Plan client surface. It keeps their Host packages and agent composition capabilities, Models settings, DeepSeek credential onboarding, and model and permission controls. The layer also omits generic Harness and Web-surface prompt sections. Its Host identity row replaces the effective non-complete preset persona after cooperative prompt transforms, so the default Standard preset cannot turn the model back into a generic coding agent. The resulting persona identifies Mantur ownership, local execution, and comic-drama work from story through production delivery.
 
@@ -38,7 +38,7 @@ Native installer validation remains the three-runner matrix owned by the desktop
 
 **Change only the global deployment persona.** Rejected because an agent-scoped preset persona shadows it before assembly.
 
-**Derive a monogram or temporary mark.** Rejected because the approved symmetric blue infinity loop is the single product mark across Web and native packages.
+**Use the horizontal wordmark at every size.** Rejected because desktop shortcuts and collapsed sidebars require a legible square icon.
 
 ## Consequences
 
@@ -47,3 +47,7 @@ Native installer validation remains the three-runner matrix owned by the desktop
 - The Mantur deployment persona takes precedence over non-complete preset personas, while preset tools and skills remain intact.
 - Other Web deployments keep their existing brand, headline, Preview badge, and controls.
 - Replacing the approved raster artwork requires synchronized Web and desktop resource copies, while the desktop runtime and profile structure remain unchanged.
+
+## Aiying Works brand
+
+The application displays 爱映工厂 and uses the supplied Aiying Works horizontal wordmark for the hero. A matching navy A and teal node mark on a pale gradient serves native icons, login, sidebar, favicon and install metadata. Committed product names and Aiying-Works artifact paths drive both native targets and DMG creation. New projects default to Documents/爱映工厂; existing project paths, user-data root, application identifier and business endpoints remain stable. The persona identifies the application as the 爱映工厂 creative assistant without claiming upstream brand ownership. The [account decision](../architecture/2026-09-08-browser-account-authorization.md) owns Keychain identity and mandatory reauthentication. Brand composition, native startup, legacy-session isolation and build checks verify the change without real account access.

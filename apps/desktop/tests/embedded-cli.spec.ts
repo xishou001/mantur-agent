@@ -76,7 +76,7 @@ describe.skipIf(process.env.DSH_TEST_EMBEDDED_CLI !== '1')('prepared embedded CL
 
   it('writes an explicit Windows launcher without relying on node.exe or global account configuration', async () => {
     const root = await profile()
-    const executable = join(root, 'CUC漫创.exe')
+    const executable = join(root, '爱映工厂.exe')
     const bin = await prepareEmbeddedCli({ resourceRoot, userData: root, executable, platform: 'win32' })
     const script = await readFile(join(bin, 'manturhub.cmd'), 'utf8')
     expect(script).toContain('setlocal DisableDelayedExpansion')

@@ -14,9 +14,9 @@ const desktopRoot = resolve(import.meta.dirname, '..')
 
 function packagedPaths(): { electronExecutable: string; resourcesRoot: string; nativeResourcesRoot: string; updateConfig: string } {
   if (process.platform === 'darwin') {
-    const app = join(desktopRoot, 'dist', process.arch === 'arm64' ? 'mac-arm64' : 'mac', 'ManTur Agent.app')
+    const app = join(desktopRoot, 'dist', process.arch === 'arm64' ? 'mac-arm64' : 'mac', '爱映工厂.app')
     return {
-      electronExecutable: join(app, 'Contents', 'MacOS', 'ManTur Agent'),
+      electronExecutable: join(app, 'Contents', 'MacOS', '爱映工厂'),
       resourcesRoot: join(app, 'Contents', 'Resources', 'app'),
       nativeResourcesRoot: join(app, 'Contents', 'Resources'),
       updateConfig: join(app, 'Contents', 'Resources', 'app-update.yml'),
@@ -25,7 +25,7 @@ function packagedPaths(): { electronExecutable: string; resourcesRoot: string; n
   if (process.platform === 'win32') {
     const directory = join(desktopRoot, 'dist', 'win-unpacked')
     return {
-      electronExecutable: join(directory, 'ManTur Agent.exe'),
+      electronExecutable: join(directory, '爱映工厂.exe'),
       resourcesRoot: join(directory, 'resources', 'app'),
       nativeResourcesRoot: join(directory, 'resources'),
       updateConfig: join(directory, 'resources', 'app-update.yml'),
@@ -123,7 +123,7 @@ try {
   const html = await response.text()
   if (!response.ok) throw new Error(`packaged dsh Web returned HTTP ${String(response.status)}`)
   if (!html.includes('__DSH_BOOT__')) throw new Error('packaged dsh Web did not return its boot payload')
-  if (!html.includes('<title>CUC漫创</title>')) throw new Error('packaged Web title is not CUC漫创')
+  if (!html.includes('<title>爱映工厂</title>')) throw new Error('packaged Web title is not 爱映工厂')
   console.log(`desktop packaged smoke: ${String(response.status)} ${new URL(url).origin}`)
   const checkpoints = await requestUpdateSave({ child: service.child, timeoutMs: 60000 })
   if (checkpoints.length !== 0) throw new Error('Fresh packaged Host returned unexpected session checkpoints')

@@ -18,12 +18,12 @@ function createTemporaryRoot(): string {
 }
 
 function updateInfo(arch: 'arm64' | 'x64', version = '1.2.3'): Record<string, unknown> {
-  const zip = `Mantur-Agent-macOS-${arch}.zip`
+  const zip = `Aiying-Works-macOS-${arch}.zip`
   return {
     version,
     files: [
       { url: zip, sha512: `${arch}-zip`, size: 10 },
-      { url: `Mantur-Agent-macOS-${arch}.dmg`, sha512: `${arch}-dmg`, size: 20 },
+      { url: `Aiying-Works-macOS-${arch}.dmg`, sha512: `${arch}-dmg`, size: 20 },
     ],
     path: zip,
     sha512: `${arch}-zip`,
@@ -52,12 +52,12 @@ describe('desktop release update metadata', () => {
     )
 
     expect(merged.files.map(file => file.url)).toEqual([
-      'Mantur-Agent-macOS-x64.zip',
-      'Mantur-Agent-macOS-x64.dmg',
-      'Mantur-Agent-macOS-arm64.zip',
-      'Mantur-Agent-macOS-arm64.dmg',
+      'Aiying-Works-macOS-x64.zip',
+      'Aiying-Works-macOS-x64.dmg',
+      'Aiying-Works-macOS-arm64.zip',
+      'Aiying-Works-macOS-arm64.dmg',
     ])
-    expect(merged.path).toBe('Mantur-Agent-macOS-x64.zip')
+    expect(merged.path).toBe('Aiying-Works-macOS-x64.zip')
     expect(yaml.load(readFileSync(output, 'utf8'))).toEqual(merged)
   })
 
@@ -70,7 +70,7 @@ describe('desktop release update metadata', () => {
     )).toThrow('macOS update versions differ')
 
     const unsafe = writeUpdateInfo(root, 'arm64')
-    writeFileSync(unsafe, readFileSync(unsafe, 'utf8').replace('Mantur-Agent', '漫途Agent'))
+    writeFileSync(unsafe, readFileSync(unsafe, 'utf8').replace('Aiying-Works', '爱映工厂'))
     expect(() => mergeMacUpdateInfo(
       unsafe,
       writeUpdateInfo(root, 'x64'),
@@ -103,8 +103,8 @@ describe('desktop release update metadata', () => {
       null,
       [],
       { url: 1, sha512: 'checksum', size: 10 },
-      { url: 'Mantur-Agent-macOS-arm64.zip', sha512: 1, size: 10 },
-      { url: 'Mantur-Agent-macOS-arm64.zip', sha512: 'checksum', size: '10' },
+      { url: 'Aiying-Works-macOS-arm64.zip', sha512: 1, size: 10 },
+      { url: 'Aiying-Works-macOS-arm64.zip', sha512: 'checksum', size: '10' },
     ]
     for (const [index, file] of invalidFiles.entries()) {
       const value = { ...updateInfo('arm64'), files: [file] }
@@ -134,7 +134,7 @@ describe('desktop release update metadata', () => {
     const root = createTemporaryRoot()
     const x64 = writeUpdateInfo(root, 'x64')
     const missing = updateInfo('arm64')
-    missing.files = [{ url: 'Mantur-Agent-macOS-arm64.dmg', sha512: 'dmg', size: 20 }]
+    missing.files = [{ url: 'Aiying-Works-macOS-arm64.dmg', sha512: 'dmg', size: 20 }]
     expect(() => mergeMacUpdateInfo(
       writeYaml(root, 'missing.yml', missing),
       x64,
@@ -178,7 +178,7 @@ describe('desktop release update metadata', () => {
         join(root, 'cli-output.yml'),
       ]
       await import('./desktop-release-update-info.ts')
-      expect(readFileSync(join(root, 'cli-output.yml'), 'utf8')).toContain('Mantur-Agent-macOS-arm64.zip')
+      expect(readFileSync(join(root, 'cli-output.yml'), 'utf8')).toContain('Aiying-Works-macOS-arm64.zip')
 
       vi.resetModules()
       process.argv = [process.execPath, join(import.meta.dirname, 'desktop-release-update-info.ts')]

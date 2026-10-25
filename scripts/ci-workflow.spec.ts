@@ -561,8 +561,8 @@ describe('Desktop release workflow', () => {
     expect(verifyWindows?.run).toContain('Get-AuthenticodeSignature -LiteralPath $path -ErrorAction Stop')
     expect(verifyWindows?.run).toContain("$signature.Status -ne 'Valid'")
     expect(verifyWindows?.run).toContain('throw "Invalid Authenticode signature')
-    expect(verifyWindows?.run).toContain('apps/desktop/dist/Mantur-Agent-Windows-x64.exe')
-    expect(verifyWindows?.run).toContain('apps/desktop/dist/win-unpacked/ManTur Agent.exe')
+    expect(verifyWindows?.run).toContain('apps/desktop/dist/Aiying-Works-Windows-x64.exe')
+    expect(verifyWindows?.run).toContain('apps/desktop/dist/win-unpacked/爱映工厂.exe')
     expect(windowsSteps.findIndex(step => step.name === 'Verify Authenticode signatures')).toBeLessThan(
       windowsSteps.findIndex(step => step.uses === 'actions/upload-artifact@v7'),
     )
@@ -602,9 +602,9 @@ describe('Desktop release workflow', () => {
       <feed><entry><title>ManTur Agent</title><link href="https://github.com/mantur-ai/mantur-harness/releases/tag/${tag}"/><content>Release</content></entry></feed>`
     const metadata = `version: ${desktopVersion}
 files:
-  - url: Mantur-Agent-macOS-arm64.zip
+  - url: Aiying-Works-macOS-arm64.zip
     sha512: checksum
-path: Mantur-Agent-macOS-arm64.zip
+path: Aiying-Works-macOS-arm64.zip
 sha512: checksum
 releaseDate: '2026-09-03T00:00:00.000Z'
 `
@@ -685,9 +685,9 @@ releaseDate: '2026-09-03T00:00:00.000Z'
         }).trim().split('\n')
         const expected = (architectures === 'both' ? ['arm64', 'x64'] : ['arm64']).flatMap(arch =>
           ['dmg', 'dmg.blockmap', 'zip', 'zip.blockmap'].map(extension =>
-            `release-input/desktop-macos-${arch}/Mantur-Agent-macOS-${arch}.${extension}`))
+            `release-input/desktop-macos-${arch}/Aiying-Works-macOS-${arch}.${extension}`))
         if (includeWindows === 'true') {
-          expected.push(...['Mantur-Agent-Windows-x64.exe', 'Mantur-Agent-Windows-x64.exe.blockmap', 'latest.yml']
+          expected.push(...['Aiying-Works-Windows-x64.exe', 'Aiying-Works-Windows-x64.exe.blockmap', 'latest.yml']
             .map(filename => `release-input/desktop-windows-x64/${filename}`))
         }
         expect(selected).toEqual(expected)
@@ -697,11 +697,11 @@ releaseDate: '2026-09-03T00:00:00.000Z'
     expect(mergeArtifacts.run).toContain('Required desktop release artifact is missing: $artifact')
     expect(mergeArtifacts.run).toContain('exit 1')
     expect(mergeArtifacts.run).toContain('cp "$artifact" "release/$(basename "$artifact")"')
-    expect(mergeArtifacts.run).not.toContain('Mantur-Agent-macOS-arm64.*')
-    expect(mergeArtifacts.run).not.toContain('Mantur-Agent-macOS-x64.*')
+    expect(mergeArtifacts.run).not.toContain('Aiying-Works-macOS-arm64.*')
+    expect(mergeArtifacts.run).not.toContain('Aiying-Works-macOS-x64.*')
     expect(mergeArtifacts.run).toContain('scripts/desktop-release-update-info.ts')
     expect(publish).toMatchObject({
-      if: 'inputs.publish',
+      if: "${{ !cancelled() && inputs.publish && needs.validate.result == 'success' && needs.assemble.result == 'success' }}",
       needs: ['validate', 'assemble'],
       environment: 'macos-release',
       permissions: { contents: 'write' },
