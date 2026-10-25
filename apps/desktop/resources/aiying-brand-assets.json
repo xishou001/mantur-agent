@@ -4,6 +4,6 @@
   "wordmarkSource": "User-supplied image, 2026-10-25",
   "icon": "aiying-app-icon.png",
   "tool": "Built-in image_gen",
-  "prompt": "Square desktop app icon for 爱映工厂 Aiying Works; a bold navy A with the reference’s teal connected ring-and-nodes motif near its upper right; generous padding; subtle near-white ice-blue to light-teal gradient; no border, shadow, bevel, full wordmark or other text.",
-  "packaging": "Generated 1254px raster resized to 1024px; identical copy at apps/web/public/aiying-icon.png"
+  "prompt": "Preserve the navy A, teal node motif and pale gradient; use a macOS rounded-square tile inset on a square canvas with alpha-transparent outer corners, no border, bevel or square frame.",
+  "packaging": "Rounded RGBA 1254px raster resized to 1024px; identical Web icon copy. Transparent outer corners checked before packaging."
 }
