@@ -6,21 +6,21 @@ Status: implemented
 
 ## Problem
 
-拉取请求工作流使用 DeepSeek 上游组织拥有的大规格运行器标签。公开的 `mantur-ai/mantur-agent` Fork 没有注册这些标签对应的运行器，因此 Linux 和原生 Windows 作业会一直排队且不会启动任何步骤。
+拉取请求工作流使用 DeepSeek 上游组织拥有的大规格运行器标签。公开的 `mantur-ai/mantur-agent` 与 `xishou001/mantur-agent` Fork 没有注册这些标签对应的运行器，因此 Linux 和原生 Windows 作业会一直排队且不会启动任何步骤。
 
 Cloudflare 预览工作流还依赖上游 Pages 项目、部署令牌与 Access 服务凭据。Mantur Fork 不拥有这套外部基础设施，但其产品检查必须保持完整且可见。
 
 ## Decision
 
-拉取请求工作流在 GitHub 分配各作业前通过 `github.repository` 选择运行器。在 `mantur-ai/mantur-agent` 中，三个高容量 Linux 作业使用 `ubuntu-24.04`，四个原生 Windows 作业使用 `windows-2025`。这些作业保留原有命令、阻塞状态与聚合依赖。
+拉取请求工作流在 GitHub 分配各作业前通过 `github.repository` 选择运行器。在 `mantur-ai/mantur-agent` 与 `xishou001/mantur-agent` 中，三个高容量 Linux 作业使用 `ubuntu-24.04`，四个原生 Windows 作业使用 `windows-2025`。这些作业保留原有命令、阻塞状态与聚合依赖。
 
 Fork 档位将编译器密集型门禁的扇出限制为两个，运行两个单 worker 覆盖率分区且不与豁免套件重叠，并将 lint、publint、录制会话和浏览器 worker 上限设为两个。Windows 构建对串行执行，Windows 覆盖率使用相同的双分区串行档位，观测聚合每次运行两个门禁。这些限制匹配四核托管资源，同时保留全部检查。
 
-`deepseek-ai/deepseek-harness` 保留大规格运行器标签和已有的仓库变量故障转移路径。Fork 专用条件只在 Mantur 仓库中优先匹配。
+`deepseek-ai/deepseek-harness` 保留大规格运行器标签和已有的仓库变量故障转移路径。Fork 专用条件只在这两个 Mantur Fork 仓库中优先匹配。
 
 Cloudflare 预览作业只在 `deepseek-ai/deepseek-harness` 中运行。Mantur 拉取请求会将该作业明确报告为跳过，因为 Fork 未配置部署。产品构建、覆盖率、快照、产物、Wine 检查和原生 Windows 检查仍由 `ci.yml` 承担；缺少外部预览不会被表述为产品验证。
 
-`scripts/ci-workflow.spec.ts` 固定运行器选择器的两个仓库分支，验证所有关键作业仍可由拉取请求触发，并固定仅上游运行预览的条件。
+`scripts/ci-workflow.spec.ts` 求值验证两个公开 Fork 以及上游默认、故障转移和 Dependabot 路径，验证所有关键作业仍可由拉取请求触发，并固定仅上游运行预览的条件。
 
 ## Alternatives considered
 
