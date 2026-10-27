@@ -2,5 +2,5 @@
 # side as of the last confirmed-consistent state. Both languages carry equal authority;
 # after editing either side, bring the other along and re-record with:
 #   pnpm run verify-translation-pairing --write .agents/notes/implemented/bug-fix/2026-10-21-stable-desktop-cli-identity.md
-2026-10-21-stable-desktop-cli-identity.md: b1bcc1b7c716d7d40499450572087b8b0a6f7b81
-2026-10-21-stable-desktop-cli-identity.zh.md: 61f09e6be28862af5e16d2688f47eb904f0a66e7
+2026-10-21-stable-desktop-cli-identity.md: 9886d8b072f669c3c634836a35047fc86c39ca9a
+2026-10-21-stable-desktop-cli-identity.zh.md: 69428b13f32eb4acd351588ef8782df68fde628a

@@ -59,15 +59,15 @@ describe.skipIf(process.platform === 'win32')('native identity through real comm
   })
 })
 
-describe.skipIf(process.platform === 'win32' || cliPackage === undefined && cliTarball === undefined)('native command consumer with frozen CLI 1.2.10', () => {
+describe.skipIf(process.platform === 'win32' || cliPackage === undefined && cliTarball === undefined)('native command consumer with frozen CLI 1.2.16', () => {
   beforeAll(async () => {
     if (cliPackage === undefined || cliTarball === undefined) throw new Error('Both frozen CLI inputs are required')
     expect(createHash('sha256').update(await readFile(cliTarball)).digest('hex'))
-      .toBe('a486b168988239485fa45e01ad24a8c319eca5eda0c1587fe9b15c1a244e99a0')
+      .toBe('a627582d1d723642fb8683d714c483c16db23b7d68098bba1c6956aaa2f9fd2c')
     const exec = promisify(execFile)
     const listing = await exec('tar', ['-tzf', cliTarball])
     const files = listing.stdout.trim().split('\n').filter(path => !path.endsWith('/'))
-    expect(files).toHaveLength(32)
+    expect(files).toHaveLength(35)
     for (const path of files) {
       expect(path.startsWith('package/')).toBe(true)
       if (['package/lib/agent-auth.js', 'package/lib/identity-binding.js'].includes(path)) continue

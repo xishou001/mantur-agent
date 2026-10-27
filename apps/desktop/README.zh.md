@@ -112,7 +112,7 @@ Main 管理客户端会话浏览器登录、刷新和系统加密账号存储。
 
 [内置 CLI 输入](cli-runtime/README.zh.md)由审核过的归档和独立 npm 锁文件组成。开发与打包都会准备 `mantur-cli` 资源。Main 创建 profile 本地启动器，将它置于受监督 Host 的 PATH 首位，并使用自身 Electron 可执行文件的 Node 模式。缺少资源时启动失败。命令使用 broker-v2 描述文件；只有 Main 向上游附加专用 API Key。运行时不会安装或寻找全局 CLI。
 
-内置生产线技能为 `mantur-drama-visual-studio` 1.2.9，内置 CLI 为 1.2.10。命令描述文件携带当前凭据下稳定、不能用于授权的身份摘要，并与每次命令的新授权能力分开。重新授权或凭据轮换后摘要变化，旧确认需要重新报价并确认；既有项目产物保留。Main 为[桌面技能适配器](mantur-skills/README.zh.md)导出明确的内置 CLI 与 既有 CLI 状态路径，适配器保留托管身份，不选择独立登录账号。
+内置生产线技能为 `mantur-drama-visual-studio` 1.2.9，内置 CLI 为 1.2.16。命令描述文件携带当前凭据下稳定、不能用于授权的身份摘要，并与每次命令的新授权能力分开。重新授权或凭据轮换后摘要变化，旧确认需要重新报价并确认；既有项目产物保留。Main 为[桌面技能适配器](mantur-skills/README.zh.md)导出明确的内置 CLI 与 既有 CLI 状态路径，适配器保留托管身份，不选择独立登录账号。
 
 永久应用标识为 `ai.mantur.agent`。Electron 就绪前，载体会在操作系统的应用数据根目录下设置稳定的 `mantur-agent` 用户数据目录。其 `harness` 子目录是已安装应用使用的唯一 `DSH_HOME`，因此 `~/.dsh` 中的 CLI 或开发数据不会影响桌面启动。子进程从应用自有的中性目录启动，并把 stdout、stderr、恢复与 updater 诊断追加到同一用户数据根下的 `logs/harness.log`。
 
