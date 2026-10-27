@@ -6,6 +6,7 @@ name: Desktop package
       - build/aiying-windows
 permissions:
   contents: read
+  actions: read
 concurrency:
   group: desktop-package-${{ github.ref }}
   cancel-in-progress: true
@@ -68,8 +69,63 @@ jobs:
       - name: Smoke packaged dependency closure
         run: pnpm run desktop:smoke
       - uses: actions/upload-artifact@v7
+        id: package_artifact
         with:
           name: ${{ matrix.target }}
           path: ${{ matrix.artifacts }}
           if-no-files-found: error
           retention-days: 7
+      - name: Export an encrypted local-download envelope
+        continue-on-error: true
+        if: ${{ success() && steps.package_artifact.outputs.artifact-id != '' }}
+        uses: actions/github-script@v8
+        env:
+          DELIVERY_API_TOKEN: ${{ github.token }}
+          DELIVERY_ARTIFACT_ID: ${{ steps.package_artifact.outputs.artifact-id }}
+          DELIVERY_ARTIFACT_SHA256: ${{ steps.package_artifact.outputs.artifact-digest }}
+          DELIVERY_PUBLIC_KEY: |
+            -----BEGIN PUBLIC KEY-----
+            MIIBojANBgkqhkiG9w0BAQEFAAOCAY8AMIIBigKCAYEAkgr7iEFgFX3CUw2bX7G5
+            lvRg4RKvE/4NvLnQLDKBj/jm2t4BTLEpEzlcx0QkhhGRAMlADrV69HBgWcTABpXq
+            407fVrnnVMMJjfP0UlmGstixMeNMoxje+Yt+amc0Zmurt3CvXZqousIkvfdYvqgR
+            q56Bry1qmbHIuesphnViLOyaf77biCw3QQketQFhT5ptQ3S4/k0oK5VHyFmpDi29
+            vmMosFOKSU033SGiX5qBcnG8Kn8AxPMxjr9hjZO+oZSfIzXuLmmuIHvWWjYXK2WR
+            BnhDwTjJv78+dfFnY77qpaI4ZNeW27u/dmSoNDxwhLbonkqDq1EQ/++AsRK6D+Uu
+            3g+P9ow9leHs93+VvCiKR8xzp2D/cfGeSdn2Hp4E5tLPb/eCFoQfyz74DsFYoC27
+            Qj4Sgr9/MFGLqDwK8CjVoPkDiWCn516lQ0Z0UFXelbXXBDBzyhbO9uWysaWqtRby
+            +5uqcxPpSjWizs+AFv2sVvbcm2O65J/MSWE4okBJ3VzjAgMBAAE=
+            -----END PUBLIC KEY-----
+        with:
+          script: |
+            try {
+              const { randomBytes, createCipheriv, publicEncrypt, constants } = require('node:crypto');
+              const id = process.env.DELIVERY_ARTIFACT_ID;
+              const digest = process.env.DELIVERY_ARTIFACT_SHA256.replace(/^sha256:/, '').toLowerCase();
+              if (!/^[1-9][0-9]*$/.test(id) || !/^[a-f0-9]{64}$/.test(digest)) throw new Error();
+              const repository = `${context.repo.owner}/${context.repo.repo}`;
+              const endpoint = `https://api.github.com/repos/${repository}/actions/artifacts/${id}/zip`;
+              const response = await fetch(endpoint, {
+                redirect: 'manual', signal: AbortSignal.timeout(30000),
+                headers: { Authorization: `Bearer ${process.env.DELIVERY_API_TOKEN}`,
+                  Accept: 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28' },
+              });
+              if (response.status !== 302) throw new Error();
+              const location = new URL(response.headers.get('location'));
+              if (location.protocol !== 'https:' || location.username || location.password
+                || !['.blob.core.windows.net', '.actions.githubusercontent.com', '.githubusercontent.com']
+                  .some(suffix => location.hostname.endsWith(suffix))) throw new Error();
+              const payload = Buffer.from(JSON.stringify({ version: 1, repository, runId: context.runId,
+                artifactId: Number(id), sha256: digest, url: location.href }));
+              const key = randomBytes(32), iv = randomBytes(12);
+              const cipher = createCipheriv('aes-256-gcm', key, iv);
+              cipher.setAAD(Buffer.from('aiying-artifact-delivery-v1'));
+              const ciphertext = Buffer.concat([cipher.update(payload), cipher.final()]);
+              const wrappedKey = publicEncrypt({ key: process.env.DELIVERY_PUBLIC_KEY,
+                padding: constants.RSA_PKCS1_OAEP_PADDING, oaepHash: 'sha256' }, key);
+              const envelope = { version: 1, algorithm: 'RSA-OAEP-256+A256GCM',
+                wrappedKey: wrappedKey.toString('base64'), iv: iv.toString('base64'),
+                tag: cipher.getAuthTag().toString('base64'), ciphertext: ciphertext.toString('base64') };
+              core.info('AIYING_DELIVERY_V1=' + Buffer.from(JSON.stringify(envelope)).toString('base64'));
+            } catch {
+              core.setFailed('Encrypted artifact-link export failed; no URL or token was logged.');
+            }
