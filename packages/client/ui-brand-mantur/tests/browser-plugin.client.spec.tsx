@@ -9,6 +9,7 @@ import {
   ManturHeroBadge, ManturHeroBrand, ManturHeroHeadline, ManturSidebarMark, ManturSidebarName,
 } from '../src/client/Brand.tsx'
 import { apply as hostApply } from '../src/index.ts'
+import { en, zh } from '../src/client/locales.ts'
 
 const HOLES = [
   'sidebar.brand.mark',
@@ -45,22 +46,27 @@ describe('Mantur browser-brand plugin', () => {
     const fiber = subject.ctx.plugin({ inject: [...inject], apply })
     await fiber.await()
     for (const hole of HOLES) expect(subject.slots.entries(hole)).toHaveLength(1)
+    for (const hole of ['sidebar.brand.mark', 'conversation.hero.brand.mark'] as const) {
+      expect(subject.slots.entries(hole)[0]?.locale).toBe('brand.mantur')
+    }
     subject.disposeHoles()
     for (const hole of HOLES) expect(subject.slots.entries(hole)).toHaveLength(0)
     await fiber.dispose()
   })
 
   it('renders the approved logo with the localized product copy', () => {
-    const t = (() => '爱映工厂') as never
+    const t = (key: string) => key === 'wordmarkAlt' ? zh.wordmarkAlt : zh.name
+    expect(en.wordmarkAlt).toBe('Aiying Works')
     const sidebarName = render(<ManturSidebarName t={t} />)
     expect(sidebarName.getByText('爱映工厂')).toBeTruthy()
     sidebarName.unmount()
 
-    const hero = render(<ManturHeroBrand size={34} className="hero-mark" />)
+    const hero = render(<ManturHeroBrand size={34} className="hero-mark" t={t} />)
     const heroLogo = hero.container.querySelector('img')
     expect(heroLogo?.getAttribute('src')).toBe('./aiying-wordmark.svg')
     expect(heroLogo?.getAttribute('class')).toBe('hero-mark')
     expect(heroLogo?.getAttribute('width')).toBe('147')
+    expect(heroLogo?.getAttribute('alt')).toBe('Aiying Works')
     hero.unmount()
 
     const headline = render(<ManturHeroHeadline t={key => key === 'headline'
@@ -69,11 +75,13 @@ describe('Mantur browser-brand plugin', () => {
     expect(headline.getByText('故事起于一念，余下交给爱映工厂')).toBeTruthy()
     headline.unmount()
 
-    const expanded = render(<ManturSidebarMark size={24} placement="expanded" />)
+    const expanded = render(<ManturSidebarMark size={24} placement="expanded" t={t} />)
     expect(expanded.container.querySelector('img')?.getAttribute('src')).toBe('./aiying-wordmark.svg')
     expect(expanded.container.querySelector('img')?.getAttribute('width')).toBe('104')
-    expanded.rerender(<ManturSidebarMark size={24} placement="rail" />)
+    expect(expanded.container.querySelector('img')?.getAttribute('alt')).toBe('Aiying Works')
+    expanded.rerender(<ManturSidebarMark size={24} placement="rail" t={t} />)
     expect(expanded.container.querySelector('img')?.getAttribute('width')).toBe('24')
+    expect(expanded.container.querySelector('img')?.getAttribute('alt')).toBe('')
     expanded.unmount()
 
     const badge = render(<ManturHeroBadge />)

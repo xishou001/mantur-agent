@@ -23,7 +23,7 @@ This package fills the generic sidebar and blank-session hero with the Aiying wo
 <a id="use-this-package"></a>
 ## Use this package
 
-Compose this row only through [`dsh-mantur-app`](../../bundle/mantur-app/README.md). The browser half registers `sidebar.brand.mark`, `sidebar.brand.name`, `conversation.hero.brand.mark`, `conversation.hero.headline`, and `conversation.hero.badge` after their owners declare them. Both locales render the confirmed product name `爱映工厂` in the sidebar, while the hero places the approved logo before the Chinese headline `故事起于一念，余下交给爱映工厂` or its English equivalent. The Mantur Web application must serve `aiying-icon.png` and `aiying-wordmark.svg` beside its built page.
+Compose this row only through [`dsh-mantur-app`](../../bundle/mantur-app/README.md). The browser half registers `sidebar.brand.mark`, `sidebar.brand.name`, `conversation.hero.brand.mark`, `conversation.hero.headline`, and `conversation.hero.badge` after their owners declare them. Both locales render the confirmed product name `爱映工厂` in the sidebar, while the hero places the approved logo before the Chinese headline `故事起于一念，余下交给爱映工厂` or its English equivalent. The Mantur Web application must serve `aiying-icon.png` and `aiying-wordmark.svg` beside its built page. The locale dictionary owns both wordmark accessibility labels; Chinese and English retain the artwork name `Aiying Works`.
 
 <a id="model-experience"></a>
 ## Model Experience

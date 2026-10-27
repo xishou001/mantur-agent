@@ -23,7 +23,7 @@ kind: "package-reference"
 <a id="use-this-package"></a>
 ## 使用本包
 
-只通过 [`dsh-mantur-app`](../../bundle/mantur-app/README.zh.md) 组装本条目。浏览器端在所有者声明后注册 `sidebar.brand.mark`、`sidebar.brand.name`、`conversation.hero.brand.mark`、`conversation.hero.headline` 与 `conversation.hero.badge`。中英文 locale 都在侧边栏显示已确认的产品名称 `爱映工厂`，首页则在“故事起于一念，余下交给爱映工厂”或其英文等价文案前显示已确认的 Logo。漫途 Web 应用必须在构建页面旁提供 `aiying-icon.png` 与 `aiying-wordmark.svg`。
+只通过 [`dsh-mantur-app`](../../bundle/mantur-app/README.zh.md) 组装本条目。浏览器端在所有者声明后注册 `sidebar.brand.mark`、`sidebar.brand.name`、`conversation.hero.brand.mark`、`conversation.hero.headline` 与 `conversation.hero.badge`。中英文 locale 都在侧边栏显示已确认的产品名称 `爱映工厂`，首页则在“故事起于一念，余下交给爱映工厂”或其英文等价文案前显示已确认的 Logo。漫途 Web 应用必须在构建页面旁提供 `aiying-icon.png` 与 `aiying-wordmark.svg`。字标的两处无障碍名称均由 locale 字典提供，中英文都保留图样名称 `Aiying Works`。
 
 <a id="model-experience"></a>
 ## 模型体验

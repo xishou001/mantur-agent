@@ -487,7 +487,7 @@ describe.skipIf(MODE === 'record')('web snapshot: Mantur product identity', () =
     try {
       const assembly = await scaffold.ctx.systemPrompt.assemble({ scope: handle.agent })
       expect(assembly.sections.find(section => section.name === 'deployment:persona')?.text)
-        .toContain('你是ManTur Agent，由漫途（Mantur）打造')
+        .toContain('你是爱映工厂的创作助手，专门在用户电脑本地完成漫剧创作与生产。')
       expect(assembly.sections.some(section => section.name === 'harness:identity')).toBe(false)
       expect(assembly.sections.some(section => section.name === 'harness:source')).toBe(false)
       expect(assembly.sections.some(section => section.name === 'app:web-surface')).toBe(false)

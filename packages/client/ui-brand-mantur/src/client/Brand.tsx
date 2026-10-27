@@ -3,7 +3,7 @@ import type { HeroBrandMarkOwnerProps } from '@deepseek-ai/dsh-client-ui-convers
 import type { SidebarBrandMarkOwnerProps } from '@deepseek-ai/dsh-client-ui-sidebar/client'
 import type { PropsLocale } from '@deepseek-ai/dsh-client-ui-slots'
 
-/** Props shared by the two product-name occupants. */
+/** Locale props shared by the brand-name and artwork occupants. */
 type ManturNameProps = PropsLocale<'brand.mantur'>
 const MANTUR_LOGO_SRC = './aiying-icon.png'
 
@@ -17,10 +17,10 @@ function ManturLogo({ size, className }: { size: number; className?: string | un
  * @param props - Sidebar placement selected by the shell.
  * @returns the placement-specific brand artwork.
  */
-export function ManturSidebarMark({ size, placement }: SidebarBrandMarkOwnerProps) {
+export function ManturSidebarMark({ size, placement, t }: SidebarBrandMarkOwnerProps & ManturNameProps) {
   return placement === 'expanded'
     ? <img src="./aiying-wordmark.svg" width={Math.round(size * 13 / 3)} height={size}
-      style={{ objectFit: 'contain', flexShrink: 0 }} alt="Aiying Works" />
+      style={{ objectFit: 'contain', flexShrink: 0 }} alt={t('wordmarkAlt')} />
     : <ManturLogo size={size} />
 }
 
@@ -38,9 +38,9 @@ export function ManturSidebarName({ t }: ManturNameProps) {
  * @param props - Hero placement selected by the conversation shell.
  * @returns the approved Mantur logo.
  */
-export function ManturHeroBrand({ size, className }: HeroBrandMarkOwnerProps) {
+export function ManturHeroBrand({ size, className, t }: HeroBrandMarkOwnerProps & ManturNameProps) {
   return <img src="./aiying-wordmark.svg" width={Math.round(size * 13 / 3)} height={size}
-    className={className} style={{ maxWidth: '100%', objectFit: 'contain' }} alt="Aiying Works" />
+    className={className} style={{ maxWidth: '100%', objectFit: 'contain' }} alt={t('wordmarkAlt')} />
 }
 
 /**
