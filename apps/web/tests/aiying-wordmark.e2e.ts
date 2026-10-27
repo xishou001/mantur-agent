@@ -72,7 +72,12 @@ it('keeps the transparent English wordmark beside the complete Chinese sidebar n
   } finally {
     const cleanup = await Promise.allSettled([
       browser?.close(), scaffold?.close(),
-      new Promise<void>((resolve, reject) => hub.close(error => error ? reject(error) : resolve())),
+      new Promise<void>((resolve, reject) => {
+        hub.close((error) => {
+          if (error) reject(error)
+          else resolve()
+        })
+      }),
     ])
     const failures = cleanup.flatMap(result => result.status === 'rejected' ? [result.reason as unknown] : [])
     if (failures.length > 0) throw new AggregateError(failures, 'Wordmark fixture cleanup failed')

@@ -2,6 +2,7 @@ import { execFileSync } from 'node:child_process'
 import { readFileSync, realpathSync } from 'node:fs'
 import { createRequire } from 'node:module'
 import { resolve } from 'node:path'
+import { runInNewContext } from 'node:vm'
 import * as yaml from 'js-yaml'
 import { describe, expect, it } from 'vitest'
 
@@ -1123,10 +1124,11 @@ function resolveRunnerExpression(value: unknown, repository: string, failover = 
   if (typeof value !== 'string' || !value.trim().startsWith('${{') || !value.trim().endsWith('}}')) {
     throw new TypeError('Runner selectors must contain a workflow expression')
   }
-  const evaluate = new Function('github', 'vars', 'fromJSON', `return (${value.trim().slice(3, -2)})`) as
-    (github: object, variables: object, parse: (text: string) => unknown) => unknown
-  return evaluate({ repository, event: { pull_request: { user: { login } } } },
-    { DSH_CI_FAILOVER_LINUX: failover, DSH_CI_FAILOVER_WINDOWS: failover }, text => JSON.parse(text) as unknown)
+  return runInNewContext(`(${value.trim().slice(3, -2)})`, {
+    github: { repository, event: { pull_request: { user: { login } } } },
+    vars: { DSH_CI_FAILOVER_LINUX: failover, DSH_CI_FAILOVER_WINDOWS: failover },
+    fromJSON: (text: string): unknown => JSON.parse(text),
+  }) as unknown
 }
 
 function loadWorkflow(path: string): Record<string, unknown> {

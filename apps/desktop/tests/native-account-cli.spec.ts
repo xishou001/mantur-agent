@@ -171,7 +171,10 @@ describe.skipIf(cliPackage === undefined && cliTarball === undefined || process.
     })
     onTestFinished(async () => {
       const closed = new Promise<void>((resolve, reject) => {
-        storage.close(error => error === undefined ? resolve() : reject(error))
+        storage.close((error) => {
+          if (error === undefined) resolve()
+          else reject(error)
+        })
       })
       storage.closeAllConnections()
       await closed

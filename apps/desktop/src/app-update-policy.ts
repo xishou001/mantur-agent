@@ -1,2 +1,2 @@
 /** Aiying Works builds are upgraded through manually reviewed branded installers. */
-export const APP_UPDATES_ENABLED = false
+export const APP_UPDATES_ENABLED: boolean = false
