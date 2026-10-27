@@ -2,6 +2,7 @@ import { execFileSync } from 'node:child_process'
 import { readFileSync, realpathSync } from 'node:fs'
 import { createRequire } from 'node:module'
 import { resolve } from 'node:path'
+import { runInNewContext } from 'node:vm'
 import * as yaml from 'js-yaml'
 import { describe, expect, it } from 'vitest'
 
@@ -269,58 +270,67 @@ describe('CI workflow', () => {
     expect(windowsObservational.env).not.toMatchObject({ DSH_GATE_FAIL_FAST: '1' })
   })
 
-  it('uses standard hosted runners for the Mantur fork without enabling its external preview', () => {
+  it.each(['mantur-ai/mantur-agent', 'xishou001/mantur-agent'])('allocates standard runners and matching resource budgets for %s', (repository) => {
     const workflow = loadWorkflow('.github/workflows/ci.yml')
-    const previewWorkflow = loadWorkflow('.github/workflows/build-preview-cloudflare.yml')
     const linuxJobs = ['node-24', 'node-24-coverage', 'node-24-consumers']
     const windowsJobs = ['windows-build', 'windows-coverage', 'windows-native-tests', 'windows-observational']
-
-    for (const jobName of linuxJobs) {
-      const job = workflowJob(workflow, jobName)
-      expect(job.if).toBe("github.event_name == 'pull_request'")
-      expect(job['runs-on']).toContain("github.repository == 'mantur-ai/mantur-agent'")
-      expect(job['runs-on']).toContain("'ubuntu-24.04'")
-      expect(job['runs-on']).toContain("'dsh-ubuntu-24-04-16core'")
+    const budgets = {
+      'node-24': { DSH_GATE_CONCURRENCY: '2' },
+      'node-24-coverage': { DSH_COVERAGE_MAX_WORKERS: '2', DSH_COVERAGE_PARTITIONS: '2', DSH_GATE_CONCURRENCY: '1' },
+      'node-24-consumers': { DSH_GATE_CONCURRENCY: '2', DSH_OXLINT_THREADS: '2', DSH_PUBLINT_CONCURRENCY: '2',
+        DSH_WEB_SNAPSHOT_WORKERS: '2', DSH_SNAPSHOT_MAX_CONCURRENCY: '2' },
+      'windows-build': { DSH_GATE_CONCURRENCY: '1' },
+      'windows-coverage': { DSH_COVERAGE_MAX_WORKERS: '2', DSH_COVERAGE_PARTITIONS: '2', DSH_GATE_CONCURRENCY: '1' },
+      'windows-observational': { DSH_GATE_CONCURRENCY: '2', DSH_PUBLINT_CONCURRENCY: '2' },
     }
-    for (const jobName of windowsJobs) {
-      const job = workflowJob(workflow, jobName)
-      expect(job.if).toBe("github.event_name == 'pull_request'")
-      expect(job['runs-on']).toContain("github.repository == 'mantur-ai/mantur-agent'")
-      expect(job['runs-on']).toContain("'windows-2025'")
-      expect(job['runs-on']).toContain("'dsh-windows-2025-16core'")
+    for (const failover of ['', 'selfhosted']) {
+      for (const name of [...linuxJobs, ...windowsJobs]) {
+        const job = workflowJob(workflow, name)
+        expect(job.if).toBe("github.event_name == 'pull_request'")
+        expect(resolveRunnerExpression(job['runs-on'], repository, failover)).toBe(linuxJobs.includes(name) ? 'ubuntu-24.04' : 'windows-2025')
+      }
+      for (const [name, expected] of Object.entries(budgets)) {
+        const env = workflowJob(workflow, name).env
+        if (!isRecord(env)) throw new TypeError(`${name} must define resource budgets`)
+        for (const [key, value] of Object.entries(expected)) {
+          expect(resolveRunnerExpression(env[key], repository, failover), `${repository} ${name} ${key}`).toBe(value)
+        }
+      }
     }
-
-    expect(workflowJob(workflow, 'node-24').env).toMatchObject({
-      DSH_GATE_CONCURRENCY: "${{ github.repository == 'mantur-ai/mantur-agent' && '2' || '8' }}",
-    })
-    expect(workflowJob(workflow, 'node-24-coverage').env).toMatchObject({
-      DSH_COVERAGE_MAX_WORKERS: "${{ github.repository == 'mantur-ai/mantur-agent' && '2' || '6' }}",
-      DSH_COVERAGE_PARTITIONS: "${{ github.repository == 'mantur-ai/mantur-agent' && '2' || '4' }}",
-      DSH_GATE_CONCURRENCY: "${{ github.repository == 'mantur-ai/mantur-agent' && '1' || '3' }}",
-    })
-    expect(workflowJob(workflow, 'node-24-consumers').env).toMatchObject({
-      DSH_GATE_CONCURRENCY: "${{ github.repository == 'mantur-ai/mantur-agent' && '2' || '10' }}",
-      DSH_OXLINT_THREADS: "${{ github.repository == 'mantur-ai/mantur-agent' && '2' || '8' }}",
-      DSH_PUBLINT_CONCURRENCY: "${{ github.repository == 'mantur-ai/mantur-agent' && '2' || '8' }}",
-      DSH_WEB_SNAPSHOT_WORKERS: "${{ github.repository == 'mantur-ai/mantur-agent' && '2' || '6' }}",
-      DSH_SNAPSHOT_MAX_CONCURRENCY: "${{ github.repository == 'mantur-ai/mantur-agent' && '2' || vars.DSH_CI_FAILOVER_LINUX == 'selfhosted' && github.event.pull_request.user.login != 'dependabot[bot]' && '12' || '32' }}",
-    })
-    expect(workflowJob(workflow, 'windows-build').env).toMatchObject({
-      DSH_GATE_CONCURRENCY: "${{ github.repository == 'mantur-ai/mantur-agent' && '1' || '' }}",
-    })
-    expect(workflowJob(workflow, 'windows-coverage').env).toMatchObject({
-      DSH_COVERAGE_MAX_WORKERS: "${{ github.repository == 'mantur-ai/mantur-agent' && '2' || '6' }}",
-      DSH_COVERAGE_PARTITIONS: "${{ github.repository == 'mantur-ai/mantur-agent' && '2' || '4' }}",
-      DSH_GATE_CONCURRENCY: "${{ github.repository == 'mantur-ai/mantur-agent' && '1' || '3' }}",
-    })
-    expect(workflowJob(workflow, 'windows-observational').env).toMatchObject({
-      DSH_GATE_CONCURRENCY: "${{ github.repository == 'mantur-ai/mantur-agent' && '2' || '' }}",
-      DSH_PUBLINT_CONCURRENCY: "${{ github.repository == 'mantur-ai/mantur-agent' && '2' || '8' }}",
-    })
-
-    const preview = workflowJob(previewWorkflow, 'preview')
+    const preview = workflowJob(loadWorkflow('.github/workflows/build-preview-cloudflare.yml'), 'preview')
     expect(preview.if).toBe("github.repository == 'deepseek-ai/deepseek-harness'")
-    expect(preview['runs-on']).toBe('dsh-ubuntu-24-04-16core')
+  })
+
+  it.each([
+    { failover: '', login: 'maintainer', linux: 'dsh-ubuntu-24-04-16core', windows: 'dsh-windows-2025-16core', snapshots: '32' },
+    { failover: 'selfhosted', login: 'maintainer', linux: ['self-hosted', 'linux', 'x64', 'vm-backup'],
+      windows: ['self-hosted', 'dsh-win-ci', 'windows'], snapshots: '12' },
+    { failover: 'selfhosted', login: 'dependabot[bot]', linux: 'dsh-ubuntu-24-04-16core', windows: 'dsh-windows-2025-16core', snapshots: '32' },
+  ])('preserves upstream runner and resource selection for $login with failover=$failover', ({ failover, login, linux, windows, snapshots }) => {
+    const workflow = loadWorkflow('.github/workflows/ci.yml')
+    const repository = 'deepseek-ai/deepseek-harness'
+    for (const name of ['node-24', 'node-24-coverage', 'node-24-consumers']) {
+      expect(resolveRunnerExpression(workflowJob(workflow, name)['runs-on'], repository, failover, login)).toEqual(linux)
+    }
+    for (const name of ['windows-build', 'windows-coverage', 'windows-native-tests', 'windows-observational']) {
+      expect(resolveRunnerExpression(workflowJob(workflow, name)['runs-on'], repository, failover, login)).toEqual(windows)
+    }
+    const budgets = {
+      'node-24': { DSH_GATE_CONCURRENCY: '8' },
+      'node-24-coverage': { DSH_COVERAGE_MAX_WORKERS: '6', DSH_COVERAGE_PARTITIONS: '4', DSH_GATE_CONCURRENCY: '3' },
+      'node-24-consumers': { DSH_GATE_CONCURRENCY: '10', DSH_OXLINT_THREADS: '8', DSH_PUBLINT_CONCURRENCY: '8',
+        DSH_WEB_SNAPSHOT_WORKERS: '6', DSH_SNAPSHOT_MAX_CONCURRENCY: snapshots },
+      'windows-build': { DSH_GATE_CONCURRENCY: '' },
+      'windows-coverage': { DSH_COVERAGE_MAX_WORKERS: '6', DSH_COVERAGE_PARTITIONS: '4', DSH_GATE_CONCURRENCY: '3' },
+      'windows-observational': { DSH_GATE_CONCURRENCY: '', DSH_PUBLINT_CONCURRENCY: '8' },
+    }
+    for (const [name, expected] of Object.entries(budgets)) {
+      const env = workflowJob(workflow, name).env
+      if (!isRecord(env)) throw new TypeError(`${name} must define resource budgets`)
+      for (const [key, value] of Object.entries(expected)) {
+        expect(resolveRunnerExpression(env[key], repository, failover, login), `${name} ${key}`).toBe(value)
+      }
+    }
   })
 
   it('gives the Wine Host TypeScript compile the repository heap budget', () => {
@@ -561,8 +571,8 @@ describe('Desktop release workflow', () => {
     expect(verifyWindows?.run).toContain('Get-AuthenticodeSignature -LiteralPath $path -ErrorAction Stop')
     expect(verifyWindows?.run).toContain("$signature.Status -ne 'Valid'")
     expect(verifyWindows?.run).toContain('throw "Invalid Authenticode signature')
-    expect(verifyWindows?.run).toContain('apps/desktop/dist/Mantur-Agent-Windows-x64.exe')
-    expect(verifyWindows?.run).toContain('apps/desktop/dist/win-unpacked/ManTur Agent.exe')
+    expect(verifyWindows?.run).toContain('apps/desktop/dist/Aiying-Works-Windows-x64.exe')
+    expect(verifyWindows?.run).toContain('apps/desktop/dist/win-unpacked/爱映工厂.exe')
     expect(windowsSteps.findIndex(step => step.name === 'Verify Authenticode signatures')).toBeLessThan(
       windowsSteps.findIndex(step => step.uses === 'actions/upload-artifact@v7'),
     )
@@ -602,9 +612,9 @@ describe('Desktop release workflow', () => {
       <feed><entry><title>ManTur Agent</title><link href="https://github.com/mantur-ai/mantur-harness/releases/tag/${tag}"/><content>Release</content></entry></feed>`
     const metadata = `version: ${desktopVersion}
 files:
-  - url: Mantur-Agent-macOS-arm64.zip
+  - url: Aiying-Works-macOS-arm64.zip
     sha512: checksum
-path: Mantur-Agent-macOS-arm64.zip
+path: Aiying-Works-macOS-arm64.zip
 sha512: checksum
 releaseDate: '2026-09-03T00:00:00.000Z'
 `
@@ -685,9 +695,9 @@ releaseDate: '2026-09-03T00:00:00.000Z'
         }).trim().split('\n')
         const expected = (architectures === 'both' ? ['arm64', 'x64'] : ['arm64']).flatMap(arch =>
           ['dmg', 'dmg.blockmap', 'zip', 'zip.blockmap'].map(extension =>
-            `release-input/desktop-macos-${arch}/Mantur-Agent-macOS-${arch}.${extension}`))
+            `release-input/desktop-macos-${arch}/Aiying-Works-macOS-${arch}.${extension}`))
         if (includeWindows === 'true') {
-          expected.push(...['Mantur-Agent-Windows-x64.exe', 'Mantur-Agent-Windows-x64.exe.blockmap', 'latest.yml']
+          expected.push(...['Aiying-Works-Windows-x64.exe', 'Aiying-Works-Windows-x64.exe.blockmap', 'latest.yml']
             .map(filename => `release-input/desktop-windows-x64/${filename}`))
         }
         expect(selected).toEqual(expected)
@@ -697,11 +707,11 @@ releaseDate: '2026-09-03T00:00:00.000Z'
     expect(mergeArtifacts.run).toContain('Required desktop release artifact is missing: $artifact')
     expect(mergeArtifacts.run).toContain('exit 1')
     expect(mergeArtifacts.run).toContain('cp "$artifact" "release/$(basename "$artifact")"')
-    expect(mergeArtifacts.run).not.toContain('Mantur-Agent-macOS-arm64.*')
-    expect(mergeArtifacts.run).not.toContain('Mantur-Agent-macOS-x64.*')
+    expect(mergeArtifacts.run).not.toContain('Aiying-Works-macOS-arm64.*')
+    expect(mergeArtifacts.run).not.toContain('Aiying-Works-macOS-x64.*')
     expect(mergeArtifacts.run).toContain('scripts/desktop-release-update-info.ts')
     expect(publish).toMatchObject({
-      if: 'inputs.publish',
+      if: "${{ !cancelled() && inputs.publish && needs.validate.result == 'success' && needs.assemble.result == 'success' }}",
       needs: ['validate', 'assemble'],
       environment: 'macos-release',
       permissions: { contents: 'write' },
@@ -1108,6 +1118,18 @@ describe('Git hooks', () => {
     }
   })
 })
+
+/** Execute the selectors' existing string, boolean and JSON expressions with a fixture context. */
+function resolveRunnerExpression(value: unknown, repository: string, failover = '', login = 'maintainer'): unknown {
+  if (typeof value !== 'string' || !value.trim().startsWith('${{') || !value.trim().endsWith('}}')) {
+    throw new TypeError('Runner selectors must contain a workflow expression')
+  }
+  return runInNewContext(`(${value.trim().slice(3, -2)})`, {
+    github: { repository, event: { pull_request: { user: { login } } } },
+    vars: { DSH_CI_FAILOVER_LINUX: failover, DSH_CI_FAILOVER_WINDOWS: failover },
+    fromJSON: (text: string): unknown => JSON.parse(text),
+  }) as unknown
+}
 
 function loadWorkflow(path: string): Record<string, unknown> {
   const workflow: unknown = yaml.load(readFileSync(resolve(root, path), 'utf8'))

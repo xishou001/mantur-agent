@@ -4,7 +4,7 @@
   - button "返回创作"
   - region "登录账号":
     - heading "登录账号" [level=1]
-    - paragraph: 在浏览器中登录并授权，完成后自动返回CUC漫创。
+    - paragraph: 在浏览器中登录并授权，完成后自动返回爱映工厂。
     - button "登录账号"
     - button "暂时跳过"
 
@@ -14,7 +14,7 @@
   - button "返回创作"
   - region "登录账号":
     - heading "登录账号" [level=1]
-    - paragraph: 在浏览器中登录并授权，完成后自动返回CUC漫创。
+    - paragraph: 在浏览器中登录并授权，完成后自动返回爱映工厂。
     - alert: 当前服务器尚未提供桌面登录接口，请联系发布人完成服务部署。无需修改本地配置文件。
     - button "登录账号"
     - button "暂时跳过"
@@ -25,7 +25,7 @@
   - button "返回创作"
   - region "登录账号":
     - heading "登录账号" [level=1]
-    - paragraph: 在浏览器中登录并授权，完成后自动返回CUC漫创。
+    - paragraph: 在浏览器中登录并授权，完成后自动返回爱映工厂。
     - alert: 登录服务返回了不兼容的数据，请联系发布人核对客户端与服务端版本。
     - button "登录账号"
     - button "重新检查登录状态"

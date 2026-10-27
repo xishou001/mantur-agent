@@ -1,5 +1,5 @@
 ---
-description: "ManTur Agent logo and product-copy occupants for the sidebar and blank-session hero, for maintainers composing the Mantur desktop client."
+description: "爱映工厂 logo and product-copy occupants for the sidebar and blank-session hero, for maintainers composing the Mantur desktop client."
 kind: "package-reference"
 ---
 
@@ -9,7 +9,7 @@ English | [中文](README.zh.md)
 
 ## Summary
 
-This package fills the generic sidebar and blank-session hero with the approved blue infinity-loop logo, the localized `ManTur Agent` product name, and the Mantur product promise. The collapsed sidebar shows the same logo until hover reveals its ordinary panel control, while the empty hero badge occupant keeps the Web Preview badge out of the Mantur composition. It changes no layout, conversation, model, permission, or agent capability.
+This package fills the generic sidebar and blank-session hero with the Aiying wordmark and rounded application icon, the localized `爱映工厂` product name, and the Mantur product promise. The collapsed sidebar shows the same logo until hover reveals its ordinary panel control, while the empty hero badge occupant keeps the Web Preview badge out of the Mantur composition. It changes no layout, conversation, model, permission, or agent capability.
 
 ## Table of Contents
 
@@ -23,7 +23,7 @@ This package fills the generic sidebar and blank-session hero with the approved 
 <a id="use-this-package"></a>
 ## Use this package
 
-Compose this row only through [`dsh-mantur-app`](../../bundle/mantur-app/README.md). The browser half registers `sidebar.brand.mark`, `sidebar.brand.name`, `conversation.hero.brand.mark`, `conversation.hero.headline`, and `conversation.hero.badge` after their owners declare them. Both locales render the confirmed product name `ManTur Agent` in the sidebar, while the hero places the approved logo before the Chinese headline `故事起于一念，余下交给漫途` or its English equivalent. The Mantur Web application must serve `mantur-logo.png` beside its built page.
+Compose this row only through [`dsh-mantur-app`](../../bundle/mantur-app/README.md). The browser half registers `sidebar.brand.mark`, `sidebar.brand.name`, `conversation.hero.brand.mark`, `conversation.hero.headline`, and `conversation.hero.badge` after their owners declare them. Both locales render the confirmed product name `爱映工厂` in the sidebar, while the hero places the approved logo before the Chinese headline `故事起于一念，余下交给爱映工厂` or its English equivalent. The Mantur Web application must serve `aiying-icon.png` and `aiying-wordmark.svg` beside its built page. The locale dictionary owns both wordmark accessibility labels; Chinese and English retain the artwork name `Aiying Works`.
 
 <a id="model-experience"></a>
 ## Model Experience
@@ -38,8 +38,8 @@ None; no text from this package reaches a provider request.
 
 <a id="known-limitations-and-deferred-work"></a>
 
-- **The approved source is raster artwork** — Web and native packaging use byte-identical 1024 px PNG files until Mantur approves a vector source.
-- **The complete product name remains visible** — the logo supplements `ManTur Agent` in the expanded sidebar instead of replacing its localized name.
+- **Native icons remain raster artwork** — the application icon uses the existing PNG and ICNS assets; the wordmark uses outlined SVG curves with no font dependency.
+- **The complete product name remains visible** — the logo supplements `爱映工厂` in the expanded sidebar instead of replacing its localized name.
 
 <a id="dev-note"></a>
 ### Dev Note
@@ -47,8 +47,10 @@ None; no text from this package reaches a provider request.
 <details>
 <summary>Working context for maintainers — click to expand</summary>
 
-The expanded row, collapsed rail, and hero render the same image URL. The sidebar shell owns the collapsed hover swap from the logo to its panel-navigation affordance.
+The expanded row and hero render the SVG wordmark; the collapsed rail renders the application icon. The sidebar shell owns the collapsed hover swap from the logo to its panel-navigation affordance.
 
 </details>
 
 **Runtime invariant:** No companion is published. One browser effect installs and removes all five slot occupants together.
+
+The expanded sidebar shows the transparent Aiying Works wordmark beside the localized 爱映工厂 label. The collapsed rail retains the rounded square application icon. The Hero uses the same transparent wordmark. The transparent SVG contains outlined lettering and a node motif. Contain fitting preserves every curve without cropping or stretching.

@@ -29,7 +29,7 @@ export function parseMacArchitecture(arguments_: string[]): MacArchitecture {
  * @returns Absolute application path.
  */
 export function macApplicationPath(root: string, architecture: MacArchitecture): string {
-  return posix.join(root, 'dist', architecture === 'arm64' ? 'mac-arm64' : 'mac', 'ManTur Agent.app')
+  return posix.join(root, 'dist', architecture === 'arm64' ? 'mac-arm64' : 'mac', '爱映工厂.app')
 }
 
 /**
@@ -66,12 +66,12 @@ async function main(): Promise<void> {
   if (process.platform !== 'darwin') throw new Error('macOS DMG creation requires macOS')
   const architecture = parseMacArchitecture(process.argv.slice(2))
   const application = macApplicationPath(desktopRoot, architecture)
-  const output = join(desktopRoot, 'dist', `Mantur-Agent-macOS-${architecture}.dmg`)
+  const output = join(desktopRoot, 'dist', `Aiying-Works-macOS-${architecture}.dmg`)
   const blockMapOutput = `${output}.blockmap`
   const temporaryDirectory = await mkdtemp(join(desktopRoot, 'dist', '.mantur-dmg-'))
   let mountPoint: string | undefined
   const writableImage = join(temporaryDirectory, 'writable.dmg')
-  const compressedImage = join(temporaryDirectory, `Mantur-Agent-macOS-${architecture}.dmg`)
+  const compressedImage = join(temporaryDirectory, `Aiying-Works-macOS-${architecture}.dmg`)
   const temporaryBlockMap = `${compressedImage}.blockmap`
   let mounted = false
   try {
@@ -81,7 +81,7 @@ async function main(): Promise<void> {
     run('hdiutil', ['attach', '-nobrowse', '-noverify', '-noautoopen', '-mountpoint', mountPoint, writableImage])
     mounted = true
     await symlink('/Applications', join(mountPoint, 'Applications'))
-    run('diskutil', ['rename', mountPoint, 'ManTur Agent'])
+    run('diskutil', ['rename', mountPoint, '爱映工厂'])
     run('hdiutil', ['detach', mountPoint])
     mounted = false
     run('hdiutil', ['convert', writableImage, '-format', 'UDZO', '-o', compressedImage])

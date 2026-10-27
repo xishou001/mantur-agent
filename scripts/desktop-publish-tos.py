@@ -61,7 +61,7 @@ def prepare(directory, version, public_url):
 
 def publish_installers(client, bucket, prefix, base, files, version):
     """Advance no-cache manual downloads without changing immutable update artifacts."""
-    installers = [name for name in ('Mantur-Agent-macOS-arm64.dmg', 'Mantur-Agent-Windows-x64.exe') if name in files]
+    installers = [name for name in ('Aiying-Works-macOS-arm64.dmg', 'Aiying-Works-Windows-x64.exe') if name in files]
     for name in installers:
         try:
             current = client.head_object(Bucket=bucket, Key=prefix + '/stable/' + name)

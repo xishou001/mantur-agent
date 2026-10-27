@@ -58,8 +58,8 @@ jobs:
           esac
           node --input-type=module <<'NODE' >> "$GITHUB_OUTPUT"
           const include = [
-            { arch: 'arm64', runner: 'macos-15', script: 'desktop:dist:mac:arm64', app: 'apps/desktop/dist/mac-arm64/ManTur Agent.app' },
-            { arch: 'x64', runner: 'macos-15-intel', script: 'desktop:dist:mac:x64', app: 'apps/desktop/dist/mac/ManTur Agent.app' },
+            { arch: 'arm64', runner: 'macos-15', script: 'desktop:dist:mac:arm64', app: 'apps/desktop/dist/mac-arm64/爱映工厂.app' },
+            { arch: 'x64', runner: 'macos-15-intel', script: 'desktop:dist:mac:x64', app: 'apps/desktop/dist/mac/爱映工厂.app' },
           ].filter(target => process.env.ARCHITECTURES === 'both' || target.arch === 'arm64')
           process.stdout.write(`matrix=${JSON.stringify({ include })}\n`)
           NODE
@@ -151,10 +151,10 @@ jobs:
         with:
           name: desktop-macos-${{ matrix.arch }}
           path: |
-            apps/desktop/dist/Mantur-Agent-macOS-${{ matrix.arch }}.dmg
-            apps/desktop/dist/Mantur-Agent-macOS-${{ matrix.arch }}.dmg.blockmap
-            apps/desktop/dist/Mantur-Agent-macOS-${{ matrix.arch }}.zip
-            apps/desktop/dist/Mantur-Agent-macOS-${{ matrix.arch }}.zip.blockmap
+            apps/desktop/dist/Aiying-Works-macOS-${{ matrix.arch }}.dmg
+            apps/desktop/dist/Aiying-Works-macOS-${{ matrix.arch }}.dmg.blockmap
+            apps/desktop/dist/Aiying-Works-macOS-${{ matrix.arch }}.zip
+            apps/desktop/dist/Aiying-Works-macOS-${{ matrix.arch }}.zip.blockmap
             apps/desktop/dist/latest-mac.yml
           if-no-files-found: error
           retention-days: 7
@@ -218,7 +218,7 @@ jobs:
 
       - name: Verify Authenticode signatures
         run: |
-          foreach ($path in 'apps/desktop/dist/Mantur-Agent-Windows-x64.exe', 'apps/desktop/dist/win-unpacked/ManTur Agent.exe') {
+          foreach ($path in 'apps/desktop/dist/Aiying-Works-Windows-x64.exe', 'apps/desktop/dist/win-unpacked/爱映工厂.exe') {
             $signature = Get-AuthenticodeSignature -LiteralPath $path -ErrorAction Stop
             if ($signature.Status -ne 'Valid') {
               throw "Invalid Authenticode signature for ${path}: $($signature.Status)"
@@ -232,8 +232,8 @@ jobs:
         with:
           name: desktop-windows-x64
           path: |
-            apps/desktop/dist/Mantur-Agent-Windows-x64.exe
-            apps/desktop/dist/Mantur-Agent-Windows-x64.exe.blockmap
+            apps/desktop/dist/Aiying-Works-Windows-x64.exe
+            apps/desktop/dist/Aiying-Works-Windows-x64.exe.blockmap
             apps/desktop/dist/latest.yml
           if-no-files-found: error
           retention-days: 7
@@ -291,11 +291,11 @@ jobs:
           required_artifacts=()
           for arch in "${arches[@]}"; do
             for extension in dmg dmg.blockmap zip zip.blockmap; do
-              required_artifacts+=("release-input/desktop-macos-$arch/Mantur-Agent-macOS-$arch.$extension")
+              required_artifacts+=("release-input/desktop-macos-$arch/Aiying-Works-macOS-$arch.$extension")
             done
           done
           if [ "$WINDOWS" = true ]; then
-            for filename in Mantur-Agent-Windows-x64.exe Mantur-Agent-Windows-x64.exe.blockmap latest.yml; do
+            for filename in Aiying-Works-Windows-x64.exe Aiying-Works-Windows-x64.exe.blockmap latest.yml; do
               required_artifacts+=("release-input/desktop-windows-x64/$filename")
             done
           fi
@@ -379,7 +379,7 @@ jobs:
           gh release create "$TAG" release/* \
             --repo "$GITHUB_REPOSITORY" \
             --verify-tag \
-            --title "ManTur Agent" \
+            --title "爱映工厂" \
             --generate-notes \
             "${prerelease[@]}"
 

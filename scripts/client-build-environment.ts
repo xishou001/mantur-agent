@@ -25,7 +25,7 @@ const OFFICIAL_CLIENT_BUILD_ENVIRONMENT = {
 /** Public client environment required by Mantur desktop artifacts. */
 const MANTUR_CLIENT_BUILD_ENVIRONMENT = {
   DSH_CLIENT_BUILD_PROFILE: 'mantur',
-  DSH_CLIENT_TITLE: 'CUC漫创',
+  DSH_CLIENT_TITLE: '爱映工厂',
 } as const
 
 /** Public variable carrying the source commit embedded in client artifacts. */

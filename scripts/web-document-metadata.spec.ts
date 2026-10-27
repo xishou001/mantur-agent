@@ -16,7 +16,7 @@ afterEach(() => {
 
 it.each(['official', 'mantur'])('keeps the optional mascot while applying %s document metadata', async (profile) => {
   vi.stubEnv('DSH_CLIENT_BUILD_PROFILE', profile)
-  vi.stubEnv('DSH_CLIENT_TITLE', profile === 'mantur' ? 'CUC漫创' : 'DeepSeek Harness')
+  vi.stubEnv('DSH_CLIENT_TITLE', profile === 'mantur' ? '爱映工厂' : 'DeepSeek Harness')
   const configPath = '../apps/web/vite.config.ts'
   const module = await import(configPath) as { default: { plugins: unknown[] } }
   const metadata = module.default.plugins.flat().find(plugin => typeof plugin === 'object'
@@ -27,11 +27,9 @@ it.each(['official', 'mantur'])('keeps the optional mascot while applying %s doc
   expect(metadata).toBeDefined()
   const html = metadata.transformIndexHtml('<title>DSH Local Build</title><link rel="icon" type="image/svg+xml" href="./favicon.svg" />')
   await metadata.closeBundle()
-  expect(vi.mocked(rm).mock.calls.map(([path]) => basename(String(path)))).toEqual([
-    profile === 'mantur' ? 'favicon.svg' : 'mantur-logo.png',
-  ])
-  expect(html).toContain(profile === 'mantur' ? '<title>CUC漫创</title>' : '<title>DeepSeek Harness</title>')
-  expect(html).toContain(profile === 'mantur' ? './mantur-logo.png' : './favicon.svg')
+  expect(vi.mocked(rm).mock.calls.map(([path]) => basename(String(path)))).toEqual(profile === 'mantur' ? ['favicon.svg'] : ['aiying-icon.png', 'aiying-wordmark.png', 'aiying-wordmark-transparent.png', 'aiying-wordmark.svg', 'aiying-wordmark-OFL.txt'])
+  expect(html).toContain(profile === 'mantur' ? '<title>爱映工厂</title>' : '<title>DeepSeek Harness</title>')
+  expect(html).toContain(profile === 'mantur' ? './aiying-icon.png' : './favicon.svg')
   if (profile === 'official') {
     expect(writeFile).not.toHaveBeenCalled()
     expect(html).not.toContain('mantur')
@@ -39,6 +37,6 @@ it.each(['official', 'mantur'])('keeps the optional mascot while applying %s doc
     const text = vi.mocked(writeFile).mock.calls[0]![1]
     if (typeof text !== 'string') throw new TypeError('metadata must write the manifest as text')
     const manifest = JSON.parse(text) as { icons: { src: string }[] }
-    expect(manifest.icons.map(icon => icon.src)).toEqual(['./mantur-logo.png'])
+    expect(manifest.icons.map(icon => icon.src)).toEqual(['./aiying-icon.png'])
   }
 })

@@ -149,7 +149,7 @@ describe('client build environment', () => {
     })).toEqual({
       DSH_CLIENT_BUILD_PROFILE: 'mantur',
       DSH_CLIENT_COMMIT_HASH: COMMIT_HASH.slice(0, 7),
-      DSH_CLIENT_TITLE: 'CUC漫创',
+      DSH_CLIENT_TITLE: '爱映工厂',
       DSH_CLIENT_VERSION: '1.2.3',
     })
   })

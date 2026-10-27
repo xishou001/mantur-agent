@@ -45,7 +45,7 @@ export function NativeAccountView(props: NativeAccountViewProps): ReactNode {
 
   return <section className={css.panel} aria-labelledby={titleId}>
     <header className={css.header}>
-      <div><h1 id={titleId}><img src="/mantur-logo.png" alt="" width={24} height={24} />{t(titleKey)}</h1>
+      <div><h1 id={titleId}><img src="/aiying-icon.png" alt="" width={24} height={24} />{t(titleKey)}</h1>
         {!signedIn && !pending && !waiting && <p>{t('nativeBrowserDescription')}</p>}
       </div>
     </header>

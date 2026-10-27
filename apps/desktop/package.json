@@ -1,6 +1,6 @@
 {
   "name": "@deepseek-ai/dsh-desktop",
-  "description": "Thin Electron carrier for the ManTur Agent desktop installers",
+  "description": "Thin Electron carrier for the 爱映工厂 desktop installers",
   "version": "0.1.20",
   "private": true,
   "type": "module",
@@ -11,7 +11,7 @@
     "pack": "pnpm run prepare:skills && pnpm run prepare:cli && pnpm run prepare:mantur-cut && electron-builder --dir --publish never",
     "prepare:mantur-cut": "tsx ../../scripts/mantur-cut-distribution.ts",
     "dist:mac:arm64": "pnpm run prepare:skills && pnpm run prepare:cli && pnpm run prepare:mantur-cut -- --target darwin-arm64 && electron-builder --mac zip --arm64 --publish never && tsx ../../scripts/create-macos-dmg.ts --arch arm64",
-    "dist:mac:arm64:local": "pnpm run prepare:skills && pnpm run prepare:cli && pnpm run prepare:mantur-cut -- --target darwin-arm64 && CSC_IDENTITY_AUTO_DISCOVERY=false electron-builder --mac zip --arm64 --publish never --config.mac.identity=- --config.mac.notarize=false --config.mac.strictVerify=true && codesign --verify --deep --strict \"dist/mac-arm64/ManTur Agent.app\" && tsx ../../scripts/create-macos-dmg.ts --arch arm64",
+    "dist:mac:arm64:local": "pnpm run prepare:skills && pnpm run prepare:cli && pnpm run prepare:mantur-cut -- --target darwin-arm64 && CSC_IDENTITY_AUTO_DISCOVERY=false electron-builder --mac zip --arm64 --publish never --config.mac.identity=- --config.mac.notarize=false --config.mac.strictVerify=true && codesign --verify --deep --strict \"dist/mac-arm64/爱映工厂.app\" && tsx ../../scripts/create-macos-dmg.ts --arch arm64",
     "dist:mac:x64": "pnpm run prepare:skills && pnpm run prepare:cli && pnpm run prepare:mantur-cut -- --target darwin-x64 && electron-builder --mac zip --x64 --publish never && tsx ../../scripts/create-macos-dmg.ts --arch x64",
     "dist:win:x64": "pnpm run prepare:skills && pnpm run prepare:cli && pnpm run prepare:mantur-cut -- --target win32-x64 && electron-builder --win nsis --x64 --publish never",
     "smoke:packaged": "tsx scripts/smoke-packaged.ts",
@@ -55,7 +55,7 @@
   },
   "build": {
     "appId": "ai.mantur.agent",
-    "productName": "ManTur Agent",
+    "productName": "爱映工厂",
     "asar": false,
     "files": [
       "lib/**/*",
@@ -91,9 +91,9 @@
       }
     ],
     "mac": {
-      "artifactName": "Mantur-Agent-macOS-${arch}.${ext}",
+      "artifactName": "Aiying-Works-macOS-${arch}.${ext}",
       "category": "public.app-category.productivity",
-      "icon": "resources/mantur-app-icon.png",
+      "icon": "resources/aiying-app-icon.png",
       "notarize": true,
       "target": [
         "dmg",
@@ -101,8 +101,8 @@
       ]
     },
     "win": {
-      "artifactName": "Mantur-Agent-Windows-${arch}.${ext}",
-      "icon": "resources/mantur-app-icon.png",
+      "artifactName": "Aiying-Works-Windows-${arch}.${ext}",
+      "icon": "resources/aiying-app-icon.png",
       "target": [
         "nsis"
       ]

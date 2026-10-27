@@ -41,7 +41,7 @@ describe('native account Main and dsh IPC', () => {
     await b.controller.skip()
     const command = b.send('prepare')
     expect(await command.result).toMatchObject({ ok: true, result: { environment: { MANTURHUB_IDENTITY_MODE: 'desktop-managed' } } })
-    expect(await readdir(b.root)).toEqual(['client-session'])
+    expect(await readdir(b.root)).toEqual(['aiying-client-session'])
     expect(await b.send('read', { path: '/api/openapi/v1/me' }).result).toMatchObject({ ok: true, result: { signedOut: true } })
     await b.release(command.id)
     expect(b.backend.observed).toEqual([])
@@ -81,7 +81,7 @@ describe('native account Main and dsh IPC', () => {
     })
     expect(b.backend.observed).toEqual([{ path: '/api/openapi/v1/me', authorization: undefined,
       apiKey: b.backend.bearer(), client: 'cli' }])
-    expect(await readdir(b.root)).toEqual(['client-session'])
+    expect(await readdir(b.root)).toEqual(['aiying-client-session'])
   })
 
   it('closes an unread stream on logout and still waits for a separate command cleanup receipt', async () => {
@@ -102,7 +102,7 @@ describe('native account Main and dsh IPC', () => {
     expect(done).toBe(false)
     await b.release(command.id)
     await logout
-    expect(await readdir(b.root)).toEqual(['client-session'])
+    expect(await readdir(b.root)).toEqual(['aiying-client-session'])
     expect((await b.send('status').result).ok).toBe(true)
   })
 
@@ -113,7 +113,7 @@ describe('native account Main and dsh IPC', () => {
       expect(await b.send('read', { path }).result).toMatchObject({ ok: false })
     }
     expect(b.backend.observed).toEqual([])
-    expect(await readdir(b.root)).toEqual(['client-session'])
+    expect(await readdir(b.root)).toEqual(['aiying-client-session'])
   })
 
   it('retains failed descriptor cleanup as failure across repeated receipts and Main shutdown', async () => {

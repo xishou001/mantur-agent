@@ -27,10 +27,10 @@ import { startDesktopService, type DesktopService } from './runtime.ts'
 import { buildApplicationMenu } from './update-menu.ts'
 import { startAutoUpdates, type DesktopUpdateController, type DesktopUpdateState } from './updater.ts'
 
-const APP_NAME = 'CUC漫创'
-// Electron derives the macOS Keychain service from this name; display branding must not change it.
-const APP_STORAGE_NAME = '漫途Agent'
-const APP_ICON = fileURLToPath(new URL('../resources/mantur-app-icon.png', import.meta.url))
+const APP_NAME = '爱映工厂'
+// Electron uses this name for the macOS Keychain service; credentials use a separate brand namespace.
+const APP_STORAGE_NAME = APP_NAME
+const APP_ICON = fileURLToPath(new URL('../resources/aiying-app-icon.png', import.meta.url))
 const STARTUP_PAGE = fileURLToPath(new URL('../resources/startup.html', import.meta.url))
 
 let mainWindow: BrowserWindow | undefined
@@ -197,7 +197,7 @@ async function launch(): Promise<void> {
         DSH_BUNDLED_SKILL_DIR: app.isPackaged
           ? join(process.resourcesPath, 'mantur-skills')
           : fileURLToPath(new URL('../.generated/mantur-skills', import.meta.url)),
-        DSH_MANTUR_PROJECTS_ROOT: join(app.getPath('documents'), 'CUC漫创'),
+        DSH_MANTUR_PROJECTS_ROOT: join(app.getPath('documents'), '爱映工厂'),
         DSH_MANTUR_NATIVE_ACCOUNT: '1',
         DSH_MANTUR_UPDATE_IPC: '1',
         ...(app.isPackaged ? {

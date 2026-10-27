@@ -25,24 +25,24 @@ function clientDocumentMetadata(): Plugin {
     transformIndexHtml(html) {
       const titled = html.replace('<title>DSH Local Build</title>', `<title>${title}</title>`)
       return isMantur
-        ? titled.replace(/<link rel="icon"[^>]*>/u, '<link rel="icon" type="image/png" href="./mantur-logo.png" />')
+        ? titled.replace(/<link rel="icon"[^>]*>/u, '<link rel="icon" type="image/png" href="./aiying-icon.png" />')
         : titled
     },
     async closeBundle() {
       if (!isMantur) {
-        await rm(src('./dist/mantur-logo.png'), { force: true })
+        await Promise.all(['aiying-icon.png', 'aiying-wordmark.png', 'aiying-wordmark-transparent.png', 'aiying-wordmark.svg', 'aiying-wordmark-OFL.txt'].map(name => rm(src(`./dist/${name}`), { force: true })))
         return
       }
       await Promise.all([
         writeFile(src('./dist/manifest.webmanifest'), `${JSON.stringify({
           id: '/',
-          name: 'CUC漫创',
-          short_name: 'CUC漫创',
+          name: '爱映工厂',
+          short_name: '爱映工厂',
           start_url: '/',
           scope: '/',
           display: 'fullscreen',
           icons: [{
-            src: './mantur-logo.png',
+            src: './aiying-icon.png',
             sizes: '1024x1024',
             type: 'image/png',
             purpose: 'any',

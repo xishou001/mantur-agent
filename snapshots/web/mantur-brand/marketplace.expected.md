@@ -55,9 +55,9 @@
     - paragraph: 确认后开始
   - paragraph:
     - code: <input>
-  - text: 在 ManturHub 登录页输入授权码
+  - text: 在 服务平台 登录页输入授权码
   - strong: MANTUR-1234
-  - link "打开 ManturHub 登录页":
+  - link "打开 服务平台 登录页":
     - /url: {{manturHubUrl}}/verify
   - button "取消登录"
   - button "登录后安装" [disabled]
@@ -89,7 +89,7 @@
     - img
     - text: 返回对话
   - heading "配方广场" [level=1]
-  - paragraph: 从经过验证的优秀案例出发，替换成你的内容，让漫途复刻同款效果。
+  - paragraph: 从经过验证的优秀案例出发，替换成你的内容，让爱映工厂复刻同款效果。
   - text: 共 1 份配方
   - img
   - textbox "搜索想复刻的画面、风格或用途"

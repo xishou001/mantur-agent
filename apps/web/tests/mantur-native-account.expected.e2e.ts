@@ -272,7 +272,7 @@ it('requires startup login and renders authorization failure and waiting at mini
     await page.getByRole('button', { name: '登录账号', exact: true }).focus()
     await page.keyboard.press('Enter')
     await page.getByRole('region', { name: '登录账号', exact: true }).getByRole('alert').waitFor()
-    expect(await page.getByRole('region', { name: '登录账号', exact: true }).getByRole('alert').innerText()).toBe('暂时无法连接CUC漫创，请检查网络后重试。')
+    expect(await page.getByRole('region', { name: '登录账号', exact: true }).getByRole('alert').innerText()).toBe('暂时无法连接爱映工厂，请检查网络后重试。')
     expect(await page.getByRole('button', { name: '重新检查登录状态' }).count()).toBe(1)
     await page.getByRole('button', { name: '重新检查登录状态' }).scrollIntoViewIfNeeded()
     await page.screenshot({ path: join(images, 'login-error-880.png') })

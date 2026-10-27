@@ -25,7 +25,7 @@ kind: "package-reference"
 <a id="use-this-package"></a>
 ## 使用本包
 
-[漫途 bundle](../../bundle/mantur-app/README.zh.md) 将本插件与 Workspace registry、持久存储一并挂载。桌面载体提供操作系统文档目录下的 `CUC漫创` 子目录；未提供默认值的部署要求用户明确选择根目录。创建调用方提供本地化的初始项目标题。
+[漫途 bundle](../../bundle/mantur-app/README.zh.md) 将本插件与 Workspace registry、持久存储一并挂载。桌面载体提供操作系统文档目录下的 `爱映工厂` 子目录；未提供默认值的部署要求用户明确选择根目录。创建调用方提供本地化的初始项目标题。
 
 | 字段 | 默认值 | 含义 |
 |---|---|---|

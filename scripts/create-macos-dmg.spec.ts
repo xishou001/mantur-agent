@@ -18,8 +18,8 @@ describe('macOS DMG inputs', () => {
   })
 
   it('uses electron-builder unpacked directory names', () => {
-    expect(macApplicationPath('/desktop', 'arm64')).toBe('/desktop/dist/mac-arm64/ManTur Agent.app')
-    expect(macApplicationPath('/desktop', 'x64')).toBe('/desktop/dist/mac/ManTur Agent.app')
+    expect(macApplicationPath('/desktop', 'arm64')).toBe('/desktop/dist/mac-arm64/爱映工厂.app')
+    expect(macApplicationPath('/desktop', 'x64')).toBe('/desktop/dist/mac/爱映工厂.app')
   })
 })
 

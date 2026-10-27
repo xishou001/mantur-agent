@@ -2,7 +2,7 @@
 
 - region "登录账号":
   - heading "登录账号" [level=1]
-  - paragraph: 在浏览器中登录并授权，完成后自动返回CUC漫创。
+  - paragraph: 在浏览器中登录并授权，完成后自动返回爱映工厂。
   - button "登录账号"
 
 ## Browser waiting

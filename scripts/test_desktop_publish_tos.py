@@ -19,7 +19,7 @@ class ReleaseTests(unittest.TestCase):
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
         self.root = Path(self.temp.name)
-        self.zip = self.root / 'Mantur-Agent-macOS-arm64.zip'
+        self.zip = self.root / 'Aiying-Works-macOS-arm64.zip'
         self.zip.write_bytes(b'test update')
         self.info = {'version': '0.1.19', 'path': self.zip.name, 'files': [{'url': self.zip.name, 'size': self.zip.stat().st_size, 'sha512': base64.b64encode(hashlib.sha512(self.zip.read_bytes()).digest()).decode()}]}
         self.write_manifest()
@@ -43,7 +43,7 @@ class ReleaseTests(unittest.TestCase):
         self.assertNotIn('latest.yml', channels)
 
     def test_manual_installer_updates_only_present_platform(self):
-        name = 'Mantur-Agent-macOS-arm64.dmg'
+        name = 'Aiying-Works-macOS-arm64.dmg'
         artifact = self.root / name
         artifact.write_bytes(b'installer')
         client = MagicMock()
@@ -65,7 +65,7 @@ class ReleaseTests(unittest.TestCase):
         client = MagicMock()
         client.head_object.return_value = {'Metadata': {'version': '0.1.21'}}
         with self.assertRaisesRegex(ValueError, 'downgrade'):
-            publisher.publish_installers(client, 'bucket', 'agent', 'https://example.com', {'Mantur-Agent-Windows-x64.exe': self.zip}, '0.1.20')
+            publisher.publish_installers(client, 'bucket', 'agent', 'https://example.com', {'Aiying-Works-Windows-x64.exe': self.zip}, '0.1.20')
         client.copy_object.assert_not_called()
 
     def test_manual_installer_rejects_stale_public_copy(self):
@@ -77,10 +77,10 @@ class ReleaseTests(unittest.TestCase):
         with patch.object(publisher, 'urlopen') as request:
             request.return_value.__enter__.return_value = response
             with self.assertRaisesRegex(ValueError, 'did not refresh'):
-                publisher.publish_installers(client, 'bucket', 'agent', 'https://example.com', {'Mantur-Agent-Windows-x64.exe': self.zip}, '0.1.20')
+                publisher.publish_installers(client, 'bucket', 'agent', 'https://example.com', {'Aiying-Works-Windows-x64.exe': self.zip}, '0.1.20')
 
     def test_separate_windows_manifest_rejects_corruption(self):
-        name = 'Mantur-Agent-Windows-x64.exe'
+        name = 'Aiying-Works-Windows-x64.exe'
         (self.root / name).write_bytes(b'corrupted windows')
         (self.root / 'SHA256SUMS-Windows.txt').write_text('0' * 64 + '  ' + name + '\n')
         with self.assertRaisesRegex(ValueError, 'SHA256 mismatch'):

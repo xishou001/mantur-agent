@@ -4,9 +4,9 @@
     - button "通用设置":
       - img
       - text: 通用设置
-    - button "漫途账号":
+    - button "账号":
       - img
-      - text: 漫途账号
+      - text: 账号
     - button "模型":
       - img
       - text: 模型
@@ -17,5 +17,5 @@
   - button "关闭":
     - img
     - text: 关闭
-  - text: 尚未登录漫途账号
-  - button "登录漫途账号"
+  - text: 尚未登录账号
+  - button "登录账号"

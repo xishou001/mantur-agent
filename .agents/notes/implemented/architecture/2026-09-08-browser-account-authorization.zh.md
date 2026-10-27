@@ -15,7 +15,7 @@ Status: implemented
 
 ## Decision
 
-桌面端将 `漫途Agent` 保留为 Electron 存储身份，与界面品牌名称分开。Electron 根据 `app.getName()` 确定 macOS 钥匙串服务；改变该身份会使已有的系统加密 grant 无法读取。Main 在打开账号存储前设置存储名称，无需复制凭据或增加其他解密路径。
+桌面端使用 `爱映工厂` 作为 Electron 应用名称与 macOS 钥匙串身份。加密客户端会话使用 `aiying-client-session` 目录；旧账号文件保留，不使用新密钥解密。品牌切换后用户需要重新登录。应用标识和用户数据根目录保持稳定。
 
 [Main](../../../../apps/desktop/src/auth/controller.ts)通过外部浏览器和精确的随机 IPv4 loopback 回调实现 browser-account-v2。交换一次性 code 前校验 state 与 issuer，并使用 PKCE。完整 create 请求及 exchange 身份在发出网络请求前由操作系统加密保存；code 在交换前加密保存。renderer 只接收公开状态和具名操作，不接收包含 state 的 URL、密码或秘密。只有确认的交换元数据才能启用登录并唤回窗口。
 

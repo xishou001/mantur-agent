@@ -13,14 +13,14 @@ describe('Mantur desktop brand assets', () => {
     const script = manifest.scripts['dist:mac:arm64:local']!
     expect(script).toContain('CSC_IDENTITY_AUTO_DISCOVERY=false electron-builder --mac zip --arm64 --publish never')
     expect(script).toContain('--config.mac.identity=- --config.mac.notarize=false --config.mac.strictVerify=true')
-    expect(script).toContain('&& codesign --verify --deep --strict "dist/mac-arm64/ManTur Agent.app" && tsx ../../scripts/create-macos-dmg.ts --arch arm64')
+    expect(script).toContain('&& codesign --verify --deep --strict "dist/mac-arm64/爱映工厂.app" && tsx ../../scripts/create-macos-dmg.ts --arch arm64')
     expect(script).not.toMatch(/xattr|spctl|--remove-signature/)
     expect(manifest.scripts['dist:mac:arm64']).not.toContain('--config.mac.identity=-')
     expect(manifest.build.mac.identity).toBeUndefined()
     expect(manifest.build.mac.notarize).toBe(true)
   })
 
-  it('uses the CUC creative icon for both native package targets', async () => {
+  it('uses the Aiying Works icon for both native package targets', async () => {
     const manifest = JSON.parse(await readFile(`${root}/apps/desktop/package.json`, 'utf8')) as {
       scripts: { 'dist:mac:arm64': string; 'dist:mac:x64': string }
       build: {
@@ -28,12 +28,12 @@ describe('Mantur desktop brand assets', () => {
         win: { artifactName: string; icon: string }
       }
     }
-    expect(manifest.build.mac.icon).toBe('resources/mantur-app-icon.png')
-    expect(manifest.build.win.icon).toBe('resources/mantur-app-icon.png')
+    expect(manifest.build.mac.icon).toBe('resources/aiying-app-icon.png')
+    expect(manifest.build.win.icon).toBe('resources/aiying-app-icon.png')
     expect(manifest.build.mac.identity).toBeUndefined()
     expect(manifest.build.mac.notarize).toBe(true)
-    expect(manifest.build.mac.artifactName).toBe('Mantur-Agent-macOS-${arch}.${ext}')
-    expect(manifest.build.win.artifactName).toBe('Mantur-Agent-Windows-${arch}.${ext}')
+    expect(manifest.build.mac.artifactName).toBe('Aiying-Works-macOS-${arch}.${ext}')
+    expect(manifest.build.win.artifactName).toBe('Aiying-Works-Windows-${arch}.${ext}')
     for (const script of [manifest.scripts['dist:mac:arm64'], manifest.scripts['dist:mac:x64']]) {
       expect(script).toContain('electron-builder --mac zip')
       expect(script).toContain('tsx ../../scripts/create-macos-dmg.ts --arch')
@@ -41,10 +41,10 @@ describe('Mantur desktop brand assets', () => {
     }
 
     const [desktopIcon, webLogo] = await Promise.all([
-      readFile(`${root}/apps/desktop/resources/mantur-app-icon.png`),
-      readFile(`${root}/apps/web/public/mantur-logo.png`),
+      readFile(`${root}/apps/desktop/resources/aiying-app-icon.png`),
+      readFile(`${root}/apps/web/public/aiying-icon.png`),
     ])
-    expect(desktopIcon).not.toEqual(webLogo)
+    expect(desktopIcon).toEqual(webLogo)
     expect(desktopIcon.subarray(0, 8)).toEqual(Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]))
     expect(desktopIcon.readUInt32BE(16)).toBe(1024)
     expect(desktopIcon.readUInt32BE(20)).toBe(1024)
